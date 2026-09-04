@@ -1,7 +1,7 @@
 # CRM Tienda — Plan y Manual del Proyecto
 
 **Última actualización:** 04 de septiembre de 2026
-**Estado general:** 🚧 Fase 1 completa (base MySQL creada e importada) — Fase 2 en curso: código subido a GitHub, falta conectar Hostinger al repositorio (2.2) y verificar lectura de datos en producción (2.4)
+**Estado general:** ✅ Fases 1 y 2 completas — base MySQL creada e importada, app desplegada en Hostinger conectada a GitHub y a la base real. Sigue Fase 3 (backend)
 **Stack (DECISIÓN FINAL ✅):** React (frontend) + Node.js/Express (backend API) + MySQL
 **Despliegue:** Web App en Hostinger, plan Business Web Hosting, conectada a GitHub (deploy automático)
 **Usuarios:** Dueño + 1-2 personas
@@ -83,9 +83,9 @@ Fases futuras (aún no crear): facturas_proveedor, movimientos_stock, ventas / d
 
 ### ⏳ Fase 2 — Preparación del despliegue
 - [x] 2.1 Crear cuenta gratuita en GitHub (si no existe) y repositorio del proyecto — repo `ajvsubotichinfo-eng/chiringuito`, código subido a rama `main`
-- [ ] 2.2 Identificar en hPanel la sección Web Apps / Node.js y conectarla al repositorio
+- [x] 2.2 Identificar en hPanel la sección Web Apps / Node.js y conectarla al repositorio
 - [x] 2.3 Desplegar una app mínima de prueba ("Hola mundo") para validar el circuito GitHub → Hostinger antes de escribir el sistema completo
-- [ ] 2.4 Conectar la app de prueba a MySQL y verificar lectura de datos
+- [x] 2.4 Conectar la app de prueba a MySQL y verificar lectura de datos — con `DB_HOST=localhost` en las variables de entorno de Hostinger (ver nota en la guía de deploy)
 
 ### ⏳ Fase 3 — Backend (API Node/Express)
 - [ ] 3.1 Estructura del proyecto y conexión a la base
@@ -173,3 +173,4 @@ Fases futuras (aún no crear): facturas_proveedor, movimientos_stock, ventas / d
 | 2026-09-04 | `crm_schema.sql` importado en la base real de Hostinger (script Node temporal en vez de phpMyAdmin, mismo resultado: 6 tablas + datos de prueba). `/api/db-test` confirma `productos_cargados: 3`. Fase 1 completa. Falta solo confirmar la pregunta abierta de moneda (1.4, sección 7). |
 | 2026-09-04 | Repositorio Git local inicializado y primer commit hecho (`.env` correctamente excluido). Falta crear el repositorio remoto en GitHub (Fase 2.1) — requiere la cuenta de GitHub del dueño, no se puede hacer sin acceso; `gh` CLI no está instalado en esta máquina. |
 | 2026-09-04 | Dueño creó el repositorio `ajvsubotichinfo-eng/chiringuito` en GitHub. Se agregó como remoto (`origin`), se renombró la rama local a `main` (para coincidir con la config de Hostinger) y se subió el primer commit con `git push -u origin main`. Fase 2.1 completa. Próximo paso: Fase 2.2 (conectar la Web App de Hostinger a este repositorio desde hPanel). |
+| 2026-09-04 | Dueño conectó la Web App de Hostinger al repositorio y cargó las variables de entorno. Primer intento dio `ER_ACCESS_DENIED_ERROR` en `/api/db-test` porque usó la IP externa de la base (la del `.env` local) como `DB_HOST`. Se corrigió a `DB_HOST=localhost` (la Web App corre en el mismo servidor que la base) y la conexión funcionó. Se corrigió `docs/GUIA_DEPLOY_HOSTINGER.md` para aclarar esta diferencia. **Fases 1 y 2 completas.** Próximo paso: Fase 3 (backend: estructura, login, endpoints). |

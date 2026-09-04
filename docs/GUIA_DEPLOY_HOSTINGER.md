@@ -23,17 +23,17 @@ El código ya está subido (Claude lo hizo con `git push` en la sesión del 04/0
    - **Framework/tipo:** Node.js (suele detectarlo solo por el `package.json`).
    - **Comando de inicio:** `npm start` (si lo pide).
    - **Dominio:** elegí dónde vivirá la app (tu dominio o un subdominio tipo `crm.tudominio.com`).
-4. **Variables de entorno** (equivalente al `.env` local): en la configuración de la Web App buscá "Environment variables" y cargá una por una. Usá los mismos valores que ya tenés funcionando en tu archivo `.env` local (`DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD` — probados el 04/09/2026, la conexión funciona):
+4. **Variables de entorno** (equivalente al `.env` local): en la configuración de la Web App buscá "Environment variables" y cargá una por una:
    | Variable | Valor |
    |---|---|
-   | DB_HOST | el mismo valor que en tu `.env` |
+   | DB_HOST | `localhost` — **⚠️ no uses la IP externa del `.env` local.** La Web App corre en el mismo servidor que la base, así que se conecta por `localhost`; la IP externa es solo para conectarse desde afuera (tu PC). Usar la IP externa acá da `ER_ACCESS_DENIED_ERROR`. |
    | DB_PORT | `3306` |
    | DB_NAME | el mismo valor que en tu `.env` |
    | DB_USER | el mismo valor que en tu `.env` |
    | DB_PASSWORD | el mismo valor que en tu `.env` |
    | NODE_ENV | `produccion` |
 5. Guardá y lanzá el **Deploy**.
-6. **Verificación:** abrí la URL de la app. Deberías ver la página de prueba con las DOS tarjetas en verde ✅✅ (servidor + base de datos). Si la de base de datos da ❌, el detalle del error indica el problema (casi siempre credenciales mal cargadas en el paso 4).
+6. **Verificación:** abrí la URL de la app. Deberías ver la página de prueba con las DOS tarjetas en verde ✅✅ (servidor + base de datos). Si la de base de datos da ❌, el detalle del error indica el problema (casi siempre `DB_HOST` mal puesto o credenciales mal cargadas en el paso 4).
 
 ## C. Subir una actualización (el flujo de siempre)
 
