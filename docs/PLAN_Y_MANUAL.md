@@ -1,7 +1,7 @@
 # CRM Tienda — Plan y Manual del Proyecto
 
 **Última actualización:** 04 de septiembre de 2026
-**Estado general:** 🚧 Fases 1 y 2 en curso — app mínima construida y probada en local; falta crear la base MySQL, completar la configuración de entorno y desplegar
+**Estado general:** 🚧 Fase 1 completa (base MySQL creada e importada) — Fase 2 en curso: código subido a GitHub, falta conectar Hostinger al repositorio (2.2) y verificar lectura de datos en producción (2.4)
 **Stack (DECISIÓN FINAL ✅):** React (frontend) + Node.js/Express (backend API) + MySQL
 **Despliegue:** Web App en Hostinger, plan Business Web Hosting, conectada a GitHub (deploy automático)
 **Usuarios:** Dueño + 1-2 personas
@@ -82,7 +82,7 @@ Fases futuras (aún no crear): facturas_proveedor, movimientos_stock, ventas / d
 - [ ] 1.4 Confirmar pregunta abierta de moneda (sección 7)
 
 ### ⏳ Fase 2 — Preparación del despliegue
-- [ ] 2.1 Crear cuenta gratuita en GitHub (si no existe) y repositorio del proyecto
+- [x] 2.1 Crear cuenta gratuita en GitHub (si no existe) y repositorio del proyecto — repo `ajvsubotichinfo-eng/chiringuito`, código subido a rama `main`
 - [ ] 2.2 Identificar en hPanel la sección Web Apps / Node.js y conectarla al repositorio
 - [x] 2.3 Desplegar una app mínima de prueba ("Hola mundo") para validar el circuito GitHub → Hostinger antes de escribir el sistema completo
 - [ ] 2.4 Conectar la app de prueba a MySQL y verificar lectura de datos
@@ -171,3 +171,5 @@ Fases futuras (aún no crear): facturas_proveedor, movimientos_stock, ventas / d
 | 2026-09-04 | Validación local completada: `npm install` y `npm start` funcionaron; el endpoint `/api/health` responde correctamente. El endpoint `/api/db-test` confirma que falta la configuración real de MySQL (`ECONNREFUSED`), por lo que el siguiente bloqueo es crear la base en Hostinger y completar `.env` con credenciales reales antes de continuar con la conexión a la base. |
 | 2026-09-04 | `.env` completado con credenciales reales de Hostinger. Se probó `/api/db-test`: la conexión a MySQL funciona (host, usuario y contraseña correctos), pero devuelve `ER_NO_SUCH_TABLE` porque todavía no se importó `crm_schema.sql`. Fase 1.1 completada. Próximo paso: Fase 1.2 (importar el esquema en phpMyAdmin). |
 | 2026-09-04 | `crm_schema.sql` importado en la base real de Hostinger (script Node temporal en vez de phpMyAdmin, mismo resultado: 6 tablas + datos de prueba). `/api/db-test` confirma `productos_cargados: 3`. Fase 1 completa. Falta solo confirmar la pregunta abierta de moneda (1.4, sección 7). |
+| 2026-09-04 | Repositorio Git local inicializado y primer commit hecho (`.env` correctamente excluido). Falta crear el repositorio remoto en GitHub (Fase 2.1) — requiere la cuenta de GitHub del dueño, no se puede hacer sin acceso; `gh` CLI no está instalado en esta máquina. |
+| 2026-09-04 | Dueño creó el repositorio `ajvsubotichinfo-eng/chiringuito` en GitHub. Se agregó como remoto (`origin`), se renombró la rama local a `main` (para coincidir con la config de Hostinger) y se subió el primer commit con `git push -u origin main`. Fase 2.1 completa. Próximo paso: Fase 2.2 (conectar la Web App de Hostinger a este repositorio desde hPanel). |
