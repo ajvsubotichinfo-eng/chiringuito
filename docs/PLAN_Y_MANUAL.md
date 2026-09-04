@@ -1,7 +1,7 @@
 # CRM Tienda — Plan y Manual del Proyecto
 
 **Última actualización:** 04 de septiembre de 2026
-**Estado general:** ✅ Fases 1 y 2 completas — base MySQL creada e importada, app desplegada en Hostinger conectada a GitHub y a la base real. Sigue Fase 3 (backend)
+**Estado general:** ✅ Fases 1, 2 y 3 completas — base de datos, deploy y backend (login, productos, proveedores, precios con historial automático, pagos con foto, reportes). Sigue Fase 4 (frontend React), pantalla por pantalla con aprobación previa del dueño
 **Stack (DECISIÓN FINAL ✅):** React (frontend) + Node.js/Express (backend API) + MySQL
 **Despliegue:** Web App en Hostinger, plan Business Web Hosting, conectada a GitHub (deploy automático)
 **Usuarios:** Dueño + 1-2 personas
@@ -93,7 +93,7 @@ Fases futuras (aún no crear): facturas_proveedor, movimientos_stock, ventas / d
 - [x] 3.3 Endpoints de productos y proveedores (listar, crear, editar, desactivar)
 - [x] 3.4 Endpoints de precios + registro automático en historial al modificar
 - [x] 3.5 Endpoints de pagos + subida de foto de comprobante
-- [ ] 3.6 Endpoint de reportes: pagos por mes/proveedor
+- [x] 3.6 Endpoint de reportes: pagos por mes/proveedor
 
 ### ⏳ Fase 4 — Frontend (React)
 *Método por pantalla: maqueta rápida en el chat → feedback/aprobación → programación.*
@@ -178,3 +178,4 @@ Fases futuras (aún no crear): facturas_proveedor, movimientos_stock, ventas / d
 | 2026-09-04 | Fase 3.3: endpoints de productos y proveedores (`src/rutas/productos.js`, `src/rutas/proveedores.js`) — listar con búsqueda, detalle, crear, editar/desactivar. Probados contra la base real (y los datos de prueba usados para probar se revirtieron). |
 | 2026-09-04 | Fase 3.4: endpoints de precios (`src/rutas/precios.js`) — comparador por producto con precio unitario real (soporta venta por bulto), edición de precio con registro automático en `historial_precios` (solo si el precio cambió), consulta de historial con diferencia en $ y %. Probado: comparador ordena bien, historial se crea al cambiar precio y no se duplica si no cambia. |
 | 2026-09-04 | Fase 3.5: endpoints de pagos (`src/rutas/pagos.js`) con subida de foto de comprobante (`multer`, guardado en `public/uploads/comprobantes/`, carpeta excluida de git salvo `.gitkeep`). Listar con filtros por proveedor y por mes. Probado con una imagen de prueba (subida y datos de prueba revertidos después). |
+| 2026-09-04 | Fase 3.6: endpoint de reportes (`src/rutas/reportes.js`) — `GET /api/reportes/pagos-por-mes`, total y cantidad de pagos agrupados por mes y proveedor, con filtros opcionales por mes y por proveedor. **Fase 3 (backend) completa.** Próximo paso: Fase 4 (frontend React) — empezar por la maqueta de la pantalla de Login para aprobación del dueño. |
