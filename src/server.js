@@ -23,6 +23,7 @@ const rutasAuth = require('./rutas/auth');
 const rutasProductos = require('./rutas/productos');
 const rutasProveedores = require('./rutas/proveedores');
 const rutasPrecios = require('./rutas/precios');
+const rutasPagos = require('./rutas/pagos');
 
 const app = express();
 
@@ -43,6 +44,7 @@ app.use('/api', rutasAuth);
 app.use('/api/productos', rutasProductos);
 app.use('/api/proveedores', rutasProveedores);
 app.use('/api/precios', rutasPrecios);
+app.use('/api/pagos', rutasPagos);
 
 // ------------------------------------------------------------
 // ENDPOINT DE DIAGNÓSTICO 1: ¿el servidor está vivo?

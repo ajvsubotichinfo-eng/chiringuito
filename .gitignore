@@ -14,3 +14,8 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Fotos de comprobantes de pago subidas por los usuarios (contenido real
+# de la tienda, no código — no se sube al repositorio).
+public/uploads/comprobantes/*
+!public/uploads/comprobantes/.gitkeep

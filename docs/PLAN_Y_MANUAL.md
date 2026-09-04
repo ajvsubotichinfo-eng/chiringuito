@@ -88,11 +88,11 @@ Fases futuras (aún no crear): facturas_proveedor, movimientos_stock, ventas / d
 - [x] 2.4 Conectar la app de prueba a MySQL y verificar lectura de datos — con `DB_HOST=localhost` en las variables de entorno de Hostinger (ver nota en la guía de deploy)
 
 ### ⏳ Fase 3 — Backend (API Node/Express)
-- [ ] 3.1 Estructura del proyecto y conexión a la base
-- [ ] 3.2 Login con roles admin/empleado
-- [ ] 3.3 Endpoints de productos y proveedores (listar, crear, editar, desactivar)
-- [ ] 3.4 Endpoints de precios + registro automático en historial al modificar
-- [ ] 3.5 Endpoints de pagos + subida de foto de comprobante
+- [x] 3.1 Estructura del proyecto y conexión a la base
+- [x] 3.2 Login con roles admin/empleado
+- [x] 3.3 Endpoints de productos y proveedores (listar, crear, editar, desactivar)
+- [x] 3.4 Endpoints de precios + registro automático en historial al modificar
+- [x] 3.5 Endpoints de pagos + subida de foto de comprobante
 - [ ] 3.6 Endpoint de reportes: pagos por mes/proveedor
 
 ### ⏳ Fase 4 — Frontend (React)
@@ -174,3 +174,7 @@ Fases futuras (aún no crear): facturas_proveedor, movimientos_stock, ventas / d
 | 2026-09-04 | Repositorio Git local inicializado y primer commit hecho (`.env` correctamente excluido). Falta crear el repositorio remoto en GitHub (Fase 2.1) — requiere la cuenta de GitHub del dueño, no se puede hacer sin acceso; `gh` CLI no está instalado en esta máquina. |
 | 2026-09-04 | Dueño creó el repositorio `ajvsubotichinfo-eng/chiringuito` en GitHub. Se agregó como remoto (`origin`), se renombró la rama local a `main` (para coincidir con la config de Hostinger) y se subió el primer commit con `git push -u origin main`. Fase 2.1 completa. Próximo paso: Fase 2.2 (conectar la Web App de Hostinger a este repositorio desde hPanel). |
 | 2026-09-04 | Dueño conectó la Web App de Hostinger al repositorio y cargó las variables de entorno. Primer intento dio `ER_ACCESS_DENIED_ERROR` en `/api/db-test` porque usó la IP externa de la base (la del `.env` local) como `DB_HOST`. Se corrigió a `DB_HOST=localhost` (la Web App corre en el mismo servidor que la base) y la conexión funcionó. Se corrigió `docs/GUIA_DEPLOY_HOSTINGER.md` para aclarar esta diferencia. **Fases 1 y 2 completas.** Próximo paso: Fase 3 (backend: estructura, login, endpoints). |
+| 2026-09-04 | Fase 3.1 y 3.2: login con roles. Se agregó `bcryptjs` y `jsonwebtoken`; middleware `requiereLogin`/`requiereAdmin` (`src/middleware/autenticacion.js`) y ruta `POST /api/login` + `GET /api/perfil` (`src/rutas/auth.js`). Se creó el primer usuario admin (`admin@enlawebtech.local`) en la base real, con contraseña hasheada. Probado en local: login correcto, rechazo con contraseña incorrecta, ruta protegida con y sin token. |
+| 2026-09-04 | Fase 3.3: endpoints de productos y proveedores (`src/rutas/productos.js`, `src/rutas/proveedores.js`) — listar con búsqueda, detalle, crear, editar/desactivar. Probados contra la base real (y los datos de prueba usados para probar se revirtieron). |
+| 2026-09-04 | Fase 3.4: endpoints de precios (`src/rutas/precios.js`) — comparador por producto con precio unitario real (soporta venta por bulto), edición de precio con registro automático en `historial_precios` (solo si el precio cambió), consulta de historial con diferencia en $ y %. Probado: comparador ordena bien, historial se crea al cambiar precio y no se duplica si no cambia. |
+| 2026-09-04 | Fase 3.5: endpoints de pagos (`src/rutas/pagos.js`) con subida de foto de comprobante (`multer`, guardado en `public/uploads/comprobantes/`, carpeta excluida de git salvo `.gitkeep`). Listar con filtros por proveedor y por mes. Probado con una imagen de prueba (subida y datos de prueba revertidos después). |
