@@ -19,6 +19,7 @@ require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const { probarConexion } = require('./config/db');
+const rutasAuth = require('./rutas/auth');
 
 const app = express();
 
@@ -31,6 +32,9 @@ app.use(express.json());
 // Sirve los archivos estáticos de la carpeta /public (la página de prueba,
 // y más adelante, la app React compilada).
 app.use(express.static(path.join(__dirname, '..', 'public')));
+
+// Rutas de login (POST /api/login) y perfil (GET /api/perfil).
+app.use('/api', rutasAuth);
 
 // ------------------------------------------------------------
 // ENDPOINT DE DIAGNÓSTICO 1: ¿el servidor está vivo?
