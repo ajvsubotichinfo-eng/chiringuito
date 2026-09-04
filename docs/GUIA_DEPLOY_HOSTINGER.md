@@ -7,36 +7,30 @@ Los pasos A y B se hacen **una sola vez**; el paso C es el que vas a repetir cad
 
 ---
 
-## A. Preparar GitHub (una sola vez)
+## A. Preparar GitHub (una sola vez) — ✅ HECHO
 
-1. Creá una cuenta gratuita en https://github.com (si no tenés).
-2. Arriba a la derecha → **+** → **New repository**.
-3. Nombre: `frutos-secos-carmen-t`. Elegí **Private** (código privado). No marques ninguna opción de inicialización (sin README, sin .gitignore — ya los tenemos). → **Create repository**.
-4. Subir el código sin usar terminal:
-   - En la página del repositorio recién creado, buscá el enlace **"uploading an existing file"**.
-   - Arrastrá TODO el contenido de la carpeta del proyecto **excepto** `node_modules` y `.env` (si existieran — de todas formas `.gitignore` los protege cuando se usa git, pero al subir a mano hay que excluirlos uno mismo).
-   - Abajo, botón verde **Commit changes**.
-5. Verificá que en el repositorio se vean: `README.md`, `package.json`, `src/`, `public/`, `docs/`, `.env.example`, `.gitignore`.
+Repositorio real: **<https://github.com/ajvsubotichinfo-eng/chiringuito>** (privado), rama `main`.
+El código ya está subido (Claude lo hizo con `git push` en la sesión del 04/09/2026). No hace falta repetir este paso.
 
-> 🔒 **Regla de oro:** el archivo `.env` (con contraseñas) JAMÁS se sube a GitHub. Las credenciales en producción se cargan en el panel de Hostinger (paso B.4).
+> 🔒 **Regla de oro:** el archivo `.env` (con contraseñas) JAMÁS se sube a GitHub. Está protegido por `.gitignore` y no está en el repositorio. Las credenciales en producción se cargan en el panel de Hostinger (paso B.4).
 
 ## B. Crear la Web App en Hostinger (una sola vez)
 
 1. Entrá a **hpanel.hostinger.com**.
 2. Buscá la sección de **Web Apps / Aplicaciones Node.js** (según la versión del panel puede estar en el menú principal o dentro de tu plan de hosting → "Administrar").
 3. Creá una app nueva:
-   - **Fuente:** conectar con GitHub → autorizá a Hostinger a acceder a tu cuenta → elegí el repositorio `frutos-secos-carmen-t`, rama `main`.
+   - **Fuente:** conectar con GitHub → autorizá a Hostinger a acceder a tu cuenta → elegí el repositorio `ajvsubotichinfo-eng/chiringuito`, rama `main`.
    - **Framework/tipo:** Node.js (suele detectarlo solo por el `package.json`).
    - **Comando de inicio:** `npm start` (si lo pide).
    - **Dominio:** elegí dónde vivirá la app (tu dominio o un subdominio tipo `crm.tudominio.com`).
-4. **Variables de entorno** (equivalente al `.env` local): en la configuración de la Web App buscá "Environment variables" y cargá una por una:
+4. **Variables de entorno** (equivalente al `.env` local): en la configuración de la Web App buscá "Environment variables" y cargá una por una. Usá los mismos valores que ya tenés funcionando en tu archivo `.env` local (`DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD` — probados el 04/09/2026, la conexión funciona):
    | Variable | Valor |
    |---|---|
-   | DB_HOST | `localhost` (o el que indique Hostinger para MySQL) |
+   | DB_HOST | el mismo valor que en tu `.env` |
    | DB_PORT | `3306` |
-   | DB_NAME | el nombre completo de tu base (con prefijo `u...._`) |
-   | DB_USER | el usuario completo (con prefijo) |
-   | DB_PASSWORD | tu contraseña de la base |
+   | DB_NAME | el mismo valor que en tu `.env` |
+   | DB_USER | el mismo valor que en tu `.env` |
+   | DB_PASSWORD | el mismo valor que en tu `.env` |
    | NODE_ENV | `produccion` |
 5. Guardá y lanzá el **Deploy**.
 6. **Verificación:** abrí la URL de la app. Deberías ver la página de prueba con las DOS tarjetas en verde ✅✅ (servidor + base de datos). Si la de base de datos da ❌, el detalle del error indica el problema (casi siempre credenciales mal cargadas en el paso 4).
