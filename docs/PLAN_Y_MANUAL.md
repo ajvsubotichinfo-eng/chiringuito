@@ -1,0 +1,173 @@
+# CRM Tienda — Plan y Manual del Proyecto
+
+**Última actualización:** 04 de septiembre de 2026
+**Estado general:** 🚧 Fases 1 y 2 en curso — app mínima construida y probada en local; falta crear la base MySQL, completar la configuración de entorno y desplegar
+**Stack (DECISIÓN FINAL ✅):** React (frontend) + Node.js/Express (backend API) + MySQL
+**Despliegue:** Web App en Hostinger, plan Business Web Hosting, conectada a GitHub (deploy automático)
+**Usuarios:** Dueño + 1-2 personas
+
+---
+
+## 1. Objetivo del proyecto
+
+Aplicación web a medida (usable como app en el celular vía PWA) para gestionar la tienda con foco en proveedores: comparar precios entre proveedores para el mismo producto, historial de cambios de precio, registro de pagos y control mensual de pagos por proveedor. En fases posteriores: cuenta corriente de proveedores, control de stock y ventas a clientes.
+
+> **Historia de la decisión de stack** (para no volver a abrir el debate 😄): se evaluaron AppSheet, PHP plano, Laravel, WordPress y Node. Se eligió Node + React porque: (1) el plan Business de Hostinger soporta Web Apps de Node.js con deploy automático desde GitHub — sin SSH ni comandos para actualizar; (2) era el stack deseado originalmente; (3) el dueño no tiene experiencia técnica, así que la simplicidad de actualización pesa más que cualquier framework; (4) WordPress se descartó porque está hecho para contenido, no para lógica relacional a medida. Ver sección 6 para el detalle.
+
+---
+
+## 2. Arquitectura general
+
+```
+[Celular / PC: navegador]
+        │
+        ▼
+  React (PWA) ──► API Node/Express ──► MySQL
+        └──────────┬──────────┘            │
+            Web App en Hostinger      Base MySQL en Hostinger
+                   ▲
+                   │ deploy automático
+              GitHub (repositorio del código)
+```
+
+- **MySQL:** todos los datos. Incluida en el plan Business. Esquema: `crm_schema.sql` (ya generado ✅).
+- **API Node/Express:** endpoints que leen/escriben la base, con login propio (JWT/sesiones), roles admin/empleado, y registro automático del historial de precios al modificar un precio.
+- **React:** las pantallas, compiladas y servidas por la misma Web App. Configurada como PWA (instalable en el celular con ícono propio).
+- **GitHub:** donde vive el código. Cada actualización = subir el código nuevo a GitHub → Hostinger redespliega solo.
+
+---
+
+## 3. Base de datos (tablas MySQL)
+
+Archivo: `crm_schema.sql` — listo para importar en phpMyAdmin. Sirve tal cual, sin cambios, para este stack.
+
+Resumen de tablas (detalle completo de columnas en el propio archivo SQL):
+
+| Tabla | Rol |
+|---|---|
+| usuarios | Login con roles admin/empleado; cada pago y cambio de precio registra quién lo hizo |
+| productos | Catálogo (nombre, categoría, código de barras, precio de venta, activo) |
+| proveedores | Datos de contacto, día de visita, notas, activo |
+| precios_proveedor ⭐ | Una fila por producto-proveedor con precio, unidad/bulto y cantidad por bulto (comparador de precio unitario real). UNIQUE(producto, proveedor) |
+| historial_precios 📈 | Se llena automáticamente desde la API al modificar un precio: precio anterior, nuevo, fecha y usuario. Diferencia $ y % se calculan al mostrar |
+| pagos | Fecha, proveedor, monto, medio de pago, comprobante (nro + foto), usuario. Filtro mensual por consultas sobre `fecha` |
+
+Fases futuras (aún no crear): facturas_proveedor, movimientos_stock, ventas / detalle_ventas / clientes.
+
+---
+
+## 4. Pantallas de la app
+
+| Pantalla | Descripción |
+|---|---|
+| 🔐 Login | Email + contraseña |
+| 🔍 Comparador | Buscás "coca cola" → proveedores que la venden con precio, del más barato al más caro, con precio unitario calculado si venden por bulto |
+| 📦 Productos | Catálogo con búsqueda; el detalle muestra proveedores/precios e historial con variación en $ y % |
+| 🚚 Proveedores | Lista; el detalle muestra sus productos, precios y pagos recibidos |
+| 💰 Registrar pago | Formulario rápido con foto de comprobante |
+| 📊 Pagos por mes | Totales agrupados por mes y proveedor, con filtros por mes y por proveedor |
+| ⚙️ Administración | Alta/baja de usuarios (solo admin) |
+
+---
+
+## 5. Plan de trabajo por fases
+
+### ✅ Fase 0 — Planificación
+- [x] Requisitos, arquitectura de datos, evaluación de stacks y decisión final (26/07)
+
+### 🚧 Fase 1 — Base de datos
+- [x] 1.1 Crear la base de datos y el usuario MySQL en hPanel de Hostinger
+- [x] 1.2 Importar `crm_schema.sql` (crea las 6 tablas) — importado por script Node en vez de phpMyAdmin, mismo resultado
+- [x] 1.3 Verificar tablas y datos de prueba
+- [ ] 1.4 Confirmar pregunta abierta de moneda (sección 7)
+
+### ⏳ Fase 2 — Preparación del despliegue
+- [ ] 2.1 Crear cuenta gratuita en GitHub (si no existe) y repositorio del proyecto
+- [ ] 2.2 Identificar en hPanel la sección Web Apps / Node.js y conectarla al repositorio
+- [x] 2.3 Desplegar una app mínima de prueba ("Hola mundo") para validar el circuito GitHub → Hostinger antes de escribir el sistema completo
+- [ ] 2.4 Conectar la app de prueba a MySQL y verificar lectura de datos
+
+### ⏳ Fase 3 — Backend (API Node/Express)
+- [ ] 3.1 Estructura del proyecto y conexión a la base
+- [ ] 3.2 Login con roles admin/empleado
+- [ ] 3.3 Endpoints de productos y proveedores (listar, crear, editar, desactivar)
+- [ ] 3.4 Endpoints de precios + registro automático en historial al modificar
+- [ ] 3.5 Endpoints de pagos + subida de foto de comprobante
+- [ ] 3.6 Endpoint de reportes: pagos por mes/proveedor
+
+### ⏳ Fase 4 — Frontend (React)
+*Método por pantalla: maqueta rápida en el chat → feedback/aprobación → programación.*
+- [ ] 4.1 Proyecto base, login y navegación
+- [ ] 4.2 Pantalla Comparador
+- [ ] 4.3 Pantallas Productos y Proveedores (con historial de precios)
+- [ ] 4.4 Formulario de pagos
+- [ ] 4.5 Dashboard de pagos por mes con filtros
+- [ ] 4.6 Configuración PWA (instalable en el celular)
+
+### ⏳ Fase 5 — Puesta en marcha
+- [ ] 5.1 Deploy final y dominio/subdominio definitivo
+- [ ] 5.2 Crear usuarios reales y probar desde los celulares
+- [ ] 5.3 Carga inicial de productos y proveedores reales
+- [ ] 5.4 Semana de prueba y ajustes
+
+### ⏳ Fases futuras
+- **Fase 6 — Cuenta corriente proveedores:** facturas, saldo (facturas − pagos), vencimientos con avisos.
+- **Fase 7 — Control de stock:** movimientos, stock actual, alerta de mínimos, escaneo de código de barras.
+- **Fase 8 — Ventas a clientes:** registro de ventas, descuento de stock, reportes, fiado.
+
+### 💡 Backlog de ideas
+- [ ] Margen de ganancia por producto (precio venta vs. mejor precio de compra) con alerta de margen bajo
+- [ ] Ranking de aumentos: qué proveedor aumenta más seguido y en mayor %
+- [ ] Gráfico de evolución de precio por producto/proveedor
+- [ ] Lista de pedido sugerida por proveedor más barato
+- [ ] Exportar resumen mensual de pagos a Excel/PDF para el contador
+- [ ] Backup automático de la base de datos
+- [ ] Web pública de la tienda (si algún día se quiere, ahí sí WordPress/WooCommerce en el dominio principal, conviviendo con el CRM en un subdominio)
+
+---
+
+## 6. Decisiones tomadas
+
+| Fecha | Decisión | Motivo |
+|---|---|---|
+| 2026-07-22 | Tabla separada precios_proveedor | Un producto con N proveedores y N precios (requisito del comparador) |
+| 2026-07-22 | Historial de precios automático desde el inicio | Comparar costo anterior vs. actual en cada reposición |
+| 2026-07-26 | App a medida en vez de AppSheet | Hosting ya contratado; código 100% generado por Claude; sin suscripción extra |
+| 2026-07-26 | Descartado PHP plano | Poca estructura para un proyecto que crecerá (fases 6-8) |
+| 2026-07-26 | Descartado Laravel | Sus ventajas requieren experiencia previa que el dueño no tiene; su despliegue exige SSH/terminal en cada actualización |
+| 2026-07-26 | Descartado WordPress | Hecho para contenido, no para lógica relacional a medida; requeriría pila de plugins frágil y aun así código custom |
+| 2026-07-26 | ✅ FINAL: Node/Express + React + MySQL como Web App | El plan Business soporta Web Apps Node con deploy automático desde GitHub: actualizar la app no requiere terminal ni SSH. Stack deseado originalmente |
+| 2026-07-26 | Frontend en React (no Angular) | Más simple y adecuado para el tamaño del proyecto |
+| 2026-07-26 | Fase 2 dedicada a validar el circuito de deploy con app mínima | Detectar problemas de infraestructura antes de escribir el sistema completo |
+| 2026-07-26 | Diseño visual iterativo, sin mockups formales previos | Herramienta interna de 2-3 usuarios: el diseño de datos/pantallas ya está cerrado (secciones 3-4); lo visual se valida con una maqueta rápida en el chat antes de programar cada pantalla y se ajusta con el uso real. Criterios fijos: mobile-first, botones grandes, navegación simple |
+
+---
+
+## 7. Preguntas abiertas
+
+- ¿Moneda única (ARS) o más de una? *(Se asume una sola; confirmar en Fase 1.4.)*
+- Dominio: ¿la app vivirá en el dominio principal o en un subdominio tipo `crm.tudominio.com`? (Se define en Fase 5.1)
+
+---
+
+## 8. Manual de operaciones
+
+- **¿Dónde vive todo?** Código en GitHub; app y base de datos en Hostinger (hpanel.hostinger.com).
+- **Credenciales de la base:** anotarlas en un lugar seguro al crearla (Fase 1.1): nombre de base, usuario, contraseña. *Nunca compartirlas en el chat ni subirlas a GitHub* (irán en variables de entorno de la Web App; se documentará en Fase 2).
+- **Cómo actualizar la app (flujo normal):** Claude entrega el código nuevo → se sube al repositorio de GitHub (desde la web de GitHub, sin terminal) → Hostinger redespliega automáticamente. *(Guía paso a paso con capturas se completará en Fase 2.)*
+- **Backups:** el plan Business incluye backups diarios. Además, exportar la base desde phpMyAdmin una vez por mes (pestaña Exportar → Continuar; guardar el archivo .sql).
+
+---
+
+## 9. Bitácora
+
+| Fecha | Qué se hizo |
+|---|---|
+| 2026-07-22 | Plan completo, arquitectura de datos y fases (versión AppSheet inicial) |
+| 2026-07-22 | Se sumó historial de precios al alcance inicial |
+| 2026-07-26 | Migración a app a medida; esquema SQL generado (`crm_schema.sql`) |
+| 2026-07-26 | Evaluación de PHP/Laravel/WordPress/Node → **decisión final: Node + React + MySQL como Web App con deploy vía GitHub**. Documento reescrito con plan en 5 fases + futuras |
+| 2026-07-26 | **Proyecto creado** para `C:\programacion\enlaweb-tech\frutos-secos-carmen-t`: app mínima de Fase 2 (Express + endpoints /api/health y /api/db-test + página de prueba), probada y funcionando. Documentación integrada al repositorio (`README.md` + carpeta `docs/` con este plan, guía de instalación local y guía de deploy). Este documento pasa a vivir en `docs/PLAN_Y_MANUAL.md` dentro del proyecto. Próximos pasos: Fase 1.1 (crear base en hPanel) y Fase 2.1 (cuenta GitHub) |
+| 2026-09-04 | Validación local completada: `npm install` y `npm start` funcionaron; el endpoint `/api/health` responde correctamente. El endpoint `/api/db-test` confirma que falta la configuración real de MySQL (`ECONNREFUSED`), por lo que el siguiente bloqueo es crear la base en Hostinger y completar `.env` con credenciales reales antes de continuar con la conexión a la base. |
+| 2026-09-04 | `.env` completado con credenciales reales de Hostinger. Se probó `/api/db-test`: la conexión a MySQL funciona (host, usuario y contraseña correctos), pero devuelve `ER_NO_SUCH_TABLE` porque todavía no se importó `crm_schema.sql`. Fase 1.1 completada. Próximo paso: Fase 1.2 (importar el esquema en phpMyAdmin). |
+| 2026-09-04 | `crm_schema.sql` importado en la base real de Hostinger (script Node temporal en vez de phpMyAdmin, mismo resultado: 6 tablas + datos de prueba). `/api/db-test` confirma `productos_cargados: 3`. Fase 1 completa. Falta solo confirmar la pregunta abierta de moneda (1.4, sección 7). |

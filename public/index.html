@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CRM Frutos Secos Carmen T — Prueba de circuito</title>
+  <!--
+    Página de prueba de la FASE 2.
+    Su único objetivo es validar que:
+      1. El servidor Node sirve archivos ✅ (si ves esta página, funciona)
+      2. La API responde ✅ (tarjeta "Servidor")
+      3. MySQL conecta ✅ (tarjeta "Base de datos")
+    Cuando lleguemos a la Fase 4, esta página se reemplaza por la app React.
+  -->
+  <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #faf6f0;
+      color: #3d2c1e;
+      margin: 0;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      box-sizing: border-box;
+    }
+    h1 { font-size: 1.4rem; margin: 16px 0 4px; text-align: center; }
+    p.sub { margin: 0 0 28px; color: #8a715a; text-align: center; }
+    .tarjeta {
+      background: #fff;
+      border: 1px solid #e8dccc;
+      border-radius: 10px;
+      padding: 18px 20px;
+      margin-bottom: 14px;
+      width: 100%;
+      max-width: 420px;
+      box-sizing: border-box;
+    }
+    .tarjeta h2 { font-size: 1rem; margin: 0 0 8px; }
+    .estado { font-size: 0.95rem; }
+    .ok { color: #2e7d32; }
+    .error { color: #c62828; }
+    .pendiente { color: #8a715a; }
+    code {
+      background: #f3ece2;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.85em;
+      word-break: break-all;
+    }
+  </style>
+</head>
+<body>
+  <h1>🥜 Frutos Secos Carmen T — CRM</h1>
+  <p class="sub">Fase 2: prueba del circuito de despliegue</p>
+
+  <div class="tarjeta">
+    <h2>1. Servidor Node</h2>
+    <div id="estado-servidor" class="estado pendiente">Verificando…</div>
+  </div>
+
+  <div class="tarjeta">
+    <h2>2. Base de datos MySQL</h2>
+    <div id="estado-db" class="estado pendiente">Verificando…</div>
+  </div>
+
+  <script>
+    // Consulta los dos endpoints de diagnóstico y pinta el resultado.
+    async function verificar(url, elementoId, formatear) {
+      const el = document.getElementById(elementoId);
+      try {
+        const resp = await fetch(url);
+        const datos = await resp.json();
+        el.className = 'estado ' + (datos.ok ? 'ok' : 'error');
+        el.innerHTML = formatear(datos);
+      } catch (e) {
+        el.className = 'estado error';
+        el.textContent = 'Sin respuesta del servidor ❌';
+      }
+    }
+
+    verificar('/api/health', 'estado-servidor', d =>
+      d.mensaje + '<br>Entorno: <code>' + d.entorno + '</code>'
+    );
+
+    verificar('/api/db-test', 'estado-db', d =>
+      d.ok
+        ? d.mensaje + '<br>Base: <code>' + d.base + '</code> · Productos de prueba: <b>' + d.productos_cargados + '</b>'
+        : d.mensaje + '<br>Detalle: <code>' + (d.detalle || 'desconocido') + '</code>'
+    );
+  </script>
+</body>
+</html>

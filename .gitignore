@@ -1,0 +1,16 @@
+# ============================================================
+# Archivos que NUNCA se suben a GitHub
+# ============================================================
+
+# Credenciales y configuración local (¡contiene contraseñas!)
+.env
+
+# Dependencias instaladas (se regeneran con: npm install)
+node_modules/
+
+# Archivos temporales del sistema
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
