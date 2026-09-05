@@ -37,9 +37,6 @@ export default function Login() {
 
   return (
     <div className="pantalla-login">
-      <div className="login-decoracion login-decoracion-arriba"></div>
-      <div className="login-decoracion login-decoracion-abajo"></div>
-
       <div className="tarjeta-login">
         <span className="monograma monograma-claro monograma-grande">FS</span>
 
@@ -81,7 +78,9 @@ export default function Login() {
               />
               <IconoTilde className="switch-check" width={14} height={14} />
             </span>
-            Mantenerme conectado 30 días
+            <span className="switch-texto">
+              Mantenerme conectado 30 días ahoramismo 
+            </span>
           </label>
 
           {error && <p className="mensaje-error">{error}</p>}
