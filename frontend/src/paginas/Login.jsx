@@ -36,8 +36,17 @@ export default function Login() {
 
   return (
     <div className="pantalla-login">
+      <div className="login-decoracion login-decoracion-arriba"></div>
+      <div className="login-decoracion login-decoracion-abajo"></div>
+
       <div className="tarjeta-login">
-        <h1>🌰 Frutos Secos<br />Carmen T</h1>
+        <span className="monograma monograma-claro monograma-grande">FS</span>
+
+        <h1 className="login-titulo">
+          <span>Frutos Secos</span>
+          <span>Carmen T</span>
+        </h1>
+        <p className="login-bienvenida">Bienvenido</p>
 
         <form onSubmit={manejarEnvio}>
           <label htmlFor="email">Email</label>
@@ -46,6 +55,7 @@ export default function Login() {
             type="email"
             value={email}
             onChange={e => setEmail(e.target.value)}
+            placeholder="tu@email.com"
             autoComplete="username"
             required
           />
@@ -56,6 +66,7 @@ export default function Login() {
             type="password"
             value={password}
             onChange={e => setPassword(e.target.value)}
+            placeholder="••••••••"
             autoComplete="current-password"
             required
           />
@@ -66,13 +77,13 @@ export default function Login() {
               checked={recordarme}
               onChange={e => setRecordarme(e.target.checked)}
             />
-            Mantenerme conectado 30 días (solo en tu computadora personal)
+            Mantenerme conectado 30 días
           </label>
 
           {error && <p className="mensaje-error">{error}</p>}
 
-          <button type="submit" className="boton-grande" disabled={cargando}>
-            {cargando ? 'Ingresando...' : 'INGRESAR'}
+          <button type="submit" className="boton-outline" disabled={cargando}>
+            {cargando ? 'Ingresando...' : 'Ingresar'}
           </button>
         </form>
       </div>

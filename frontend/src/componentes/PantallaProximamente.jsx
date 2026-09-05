@@ -4,8 +4,8 @@
 export default function PantallaProximamente({ titulo }) {
   return (
     <div className="pantalla-proximamente">
-      <h2>{titulo}</h2>
-      <p>Próximamente 🚧</p>
+      <span className="etiqueta">{titulo}</span>
+      <p>Próximamente</p>
     </div>
   );
 }

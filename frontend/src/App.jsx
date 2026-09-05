@@ -31,9 +31,9 @@ export default function App() {
           <Route element={<RutaProtegida />}>
             <Route element={<Layout />}>
               <Route path="/" element={<Comparador />} />
-              <Route path="/productos" element={<PantallaProximamente titulo="📦 Productos" />} />
-              <Route path="/proveedores" element={<PantallaProximamente titulo="🚚 Proveedores" />} />
-              <Route path="/pagos" element={<PantallaProximamente titulo="💰 Pagos" />} />
+              <Route path="/productos" element={<PantallaProximamente titulo="Productos" />} />
+              <Route path="/proveedores" element={<PantallaProximamente titulo="Proveedores" />} />
+              <Route path="/pagos" element={<PantallaProximamente titulo="Pagos" />} />
             </Route>
           </Route>
         </Routes>
