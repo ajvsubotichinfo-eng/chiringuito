@@ -8,19 +8,19 @@
    ============================================================ */
 
 :root {
-  --color-primario: #3B3AC4;
-  --color-primario-oscuro: #2F2EA6;
-  --color-primario-suave: #ECEBFF;
+  --color-primario: #01006C;
+  --color-primario-oscuro: #010050;
+  --color-primario-suave: #E5E4F2;
   --color-fondo: #F3F4F8;
   --color-superficie: #FFFFFF;
   --color-texto: #15152E;
   --color-texto-suave: #8B8CA7;
   --color-borde: #E6E7EF;
-  --color-error: #B3261E;
-  --color-error-fondo: #FBECEB;
+  --color-error: #E11D48;
+  --color-error-fondo: #FDECEE;
 
-  --sombra-tarjeta: 0 10px 30px rgba(59, 58, 196, 0.10);
-  --sombra-primaria: 0 16px 36px rgba(59, 58, 196, 0.32);
+  --sombra-tarjeta: 0 10px 30px rgba(1, 0, 108, 0.12);
+  --sombra-primaria: 0 16px 36px rgba(1, 0, 108, 0.35);
   --radio-tarjeta: 24px;
 
   font-family: 'Montserrat', 'Segoe UI', system-ui, sans-serif;
