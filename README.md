@@ -4,7 +4,7 @@ Aplicación web a medida para gestionar la tienda: productos, proveedores, compa
 
 **Stack:** React (frontend) · Node.js/Express (backend) · MySQL (base de datos)
 **Hosting:** Hostinger Business Web Hosting (Web App Node.js con deploy desde GitHub)
-**Estado actual:** 🚧 Fase 2 — app mínima para validar el circuito de despliegue
+**Estado actual:** 🚧 Fases 1, 2 y 3 completas (base de datos, deploy, backend) — Fase 4 (frontend) en curso
 
 ---
 
@@ -27,19 +27,34 @@ frutos-secos-carmen-t/
 │   ├── server.js          ← Punto de entrada: levanta el servidor
 │   ├── config/
 │   │   └── db.js          ← Conexión a MySQL
-│   └── routes/            ← (Fase 3) Endpoints de la API por módulo
+│   ├── middleware/
+│   │   └── autenticacion.js ← Verifica el login (JWT) en cada pedido
+│   └── rutas/             ← Endpoints de la API: auth, productos, proveedores, precios, pagos, reportes
 │
-└── public/                ← 🌐 LO QUE VE EL NAVEGADOR
-    └── index.html         ← Página de prueba (Fase 4: app React)
+├── frontend/              ← 📱 CÓDIGO DEL FRONTEND (React + Vite)
+│   └── src/               ← Pantallas, componentes, contexto de sesión
+│                            (se compila con "npm run build:frontend" y el
+│                             resultado va DIRECTO a /public, ver abajo)
+│
+├── uploads/comprobantes/  ← 🧾 Fotos de comprobantes de pago (subidas por
+│                            los usuarios). Aparte de /public a propósito:
+│                            el build de React no debe borrarlas nunca.
+│
+└── public/                ← 🌐 LO QUE SIRVE EXPRESS AL NAVEGADOR
+    └── (generado)         ← App de React ya compilada — NO editar a mano,
+                              se pisa solo con cada "npm run build:frontend"
 ```
 
 ## ▶️ Comandos rápidos
 
 | Comando | Qué hace |
 |---|---|
-| `npm install` | Instala las dependencias (solo la primera vez o si cambia package.json) |
+| `npm install` | Instala las dependencias del backend (solo la primera vez o si cambia package.json) |
 | `npm start` | Arranca el servidor → http://localhost:3000 |
 | `npm run dev` | Igual, pero se reinicia solo al editar código (para desarrollo) |
+| `npm run build:frontend` | Compila la app de React y actualiza `/public` — **hacerlo siempre antes de subir un cambio de frontend** |
+
+Para programar el frontend con recarga automática: `cd frontend && npm install` (primera vez) y `npm run dev` (abre en otro puerto, ej. 5173, y ya manda las llamadas a `/api` al backend).
 
 ## 🔧 ¿Necesitás hacer un arreglo a mano?
 

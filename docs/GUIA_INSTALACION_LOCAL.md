@@ -39,8 +39,7 @@ Esto descarga las librerías del proyecto en la carpeta `node_modules` (tarda 1-
      ```
      copy .env.example .env
      ```
-2. Abrí `.env` con el Bloc de notas y completá los datos de la base MySQL.
-   - **Nota:** para la prueba local de la Fase 2, si todavía no tenés un MySQL en tu PC, no pasa nada: el servidor va a arrancar igual y la tarjeta "Base de datos" de la página va a mostrar error de conexión — eso es esperado. La conexión real se prueba en Hostinger, donde la base ya existe.
+2. Abrí `.env` con el Bloc de notas y completá los datos de la base MySQL (los mismos que están cargados en producción, se los pedís a Claude o los mirás en hPanel) y una clave cualquiera larga en `JWT_SECRET`.
 
 ## Paso 5 — Arrancar el servidor
 
@@ -58,11 +57,19 @@ Vas a ver un mensaje como:
 
 ## Paso 6 — Probar
 
-Abrí el navegador en **http://localhost:3000**. Deberías ver la página de prueba con dos tarjetas:
-- **Servidor Node:** ✅ verde siempre (si arrancó).
-- **Base de datos MySQL:** ✅ verde solo si configuraste un MySQL con las tablas; en tu PC sin MySQL va a dar ❌, y está bien por ahora.
+Abrí el navegador en **http://localhost:3000**. Deberías ver la pantalla de Login del CRM. Iniciá sesión con tu usuario para entrar a la app.
 
 Para **detener** el servidor: en el cmd, apretá `Ctrl + C`.
+
+## (Opcional) Programar el frontend con recarga automática
+
+Si vas a editar pantallas de React (`frontend/`), conviene correrlo aparte para ver los cambios al instante:
+```
+cd frontend
+npm install
+npm run dev
+```
+Se abre en otra dirección (ej. `http://localhost:5173`) y ya manda solo las llamadas a la API al backend (que tiene que estar corriendo con `npm start` en la otra terminal). Cuando termines de editar, **no te olvides de** `npm run build:frontend` (desde la carpeta principal del proyecto) antes de subir los cambios — si no, Hostinger va a seguir mostrando la versión vieja.
 
 ---
 

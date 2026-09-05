@@ -1,7 +1,7 @@
 # CRM Tienda — Plan y Manual del Proyecto
 
 **Última actualización:** 04 de septiembre de 2026
-**Estado general:** ✅ Fases 1, 2 y 3 completas — base de datos, deploy y backend (login, productos, proveedores, precios con historial automático, pagos con foto, reportes). Sigue Fase 4 (frontend React), pantalla por pantalla con aprobación previa del dueño
+**Estado general:** 🚧 Fases 1, 2 y 3 completas; Fase 4 en curso — proyecto React base con login y navegación funcionando (4.1). Siguen las pantallas Comparador, Productos/Proveedores y Pagos, cada una con su maqueta previa
 **Stack (DECISIÓN FINAL ✅):** React (frontend) + Node.js/Express (backend API) + MySQL
 **Despliegue:** Web App en Hostinger, plan Business Web Hosting, conectada a GitHub (deploy automático)
 **Usuarios:** Dueño + 1-2 personas
@@ -97,7 +97,7 @@ Fases futuras (aún no crear): facturas_proveedor, movimientos_stock, ventas / d
 
 ### ⏳ Fase 4 — Frontend (React)
 *Método por pantalla: maqueta rápida en el chat → feedback/aprobación → programación.*
-- [ ] 4.1 Proyecto base, login y navegación
+- [x] 4.1 Proyecto base, login y navegación
 - [ ] 4.2 Pantalla Comparador
 - [ ] 4.3 Pantallas Productos y Proveedores (con historial de precios)
 - [ ] 4.4 Formulario de pagos
@@ -179,3 +179,4 @@ Fases futuras (aún no crear): facturas_proveedor, movimientos_stock, ventas / d
 | 2026-09-04 | Fase 3.4: endpoints de precios (`src/rutas/precios.js`) — comparador por producto con precio unitario real (soporta venta por bulto), edición de precio con registro automático en `historial_precios` (solo si el precio cambió), consulta de historial con diferencia en $ y %. Probado: comparador ordena bien, historial se crea al cambiar precio y no se duplica si no cambia. |
 | 2026-09-04 | Fase 3.5: endpoints de pagos (`src/rutas/pagos.js`) con subida de foto de comprobante (`multer`, guardado en `public/uploads/comprobantes/`, carpeta excluida de git salvo `.gitkeep`). Listar con filtros por proveedor y por mes. Probado con una imagen de prueba (subida y datos de prueba revertidos después). |
 | 2026-09-04 | Fase 3.6: endpoint de reportes (`src/rutas/reportes.js`) — `GET /api/reportes/pagos-por-mes`, total y cantidad de pagos agrupados por mes y proveedor, con filtros opcionales por mes y por proveedor. **Fase 3 (backend) completa.** Próximo paso: Fase 4 (frontend React) — empezar por la maqueta de la pantalla de Login para aprobación del dueño. |
+| 2026-09-04 | Fase 4.1: maqueta de Login + navegación inferior aprobada por el dueño. Se creó `frontend/` (React + Vite + react-router-dom), compilando directo a `/public` (`npm run build:frontend` desde la raíz). Se armó: login funcional contra `/api/login`, contexto de sesión (token en localStorage), rutas protegidas, layout con encabezado + navegación inferior (Buscar/Productos/Proveedores/Pagos), y pantallas placeholder "Próximamente" para las secciones que faltan. **Importante:** las fotos de comprobantes (`uploads/comprobantes/`) se movieron fuera de `/public` a un directorio propio en la raíz, porque el build de React vacía `/public` en cada compilación (`emptyOutDir`) y hubiera borrado las fotos ya subidas en cada deploy. `server.js` ahora sirve `/uploads` como un estático aparte. Probado de punta a punta en el navegador (playwright-cli): login correcto, error con contraseña incorrecta, navegación, y logout — todo verificado con capturas de pantalla en escritorio y en tamaño celular. |

@@ -38,6 +38,12 @@ app.use(express.json());
 // y más adelante, la app React compilada).
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
+// Fotos de comprobantes de pago: se sirven desde /uploads, una carpeta
+// SEPARADA de /public a propósito. El build de React vacía /public en
+// cada despliegue, y las fotos ya subidas por los usuarios no deben
+// borrarse nunca por eso.
+app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
+
 // Rutas de login (POST /api/login) y perfil (GET /api/perfil).
 app.use('/api', rutasAuth);
 

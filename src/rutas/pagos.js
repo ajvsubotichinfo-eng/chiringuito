@@ -10,8 +10,10 @@
 //                                    la foto del comprobante)
 //
 // La foto se manda como multipart/form-data en el campo "comprobante".
-// Se guarda en public/uploads/comprobantes/ y se sirve como archivo
-// estático (ver server.js), por eso alcanza con guardar la URL relativa.
+// Se guarda en /uploads/comprobantes (fuera de /public a propósito: el
+// build de React vacía /public en cada despliegue, y así las fotos ya
+// subidas no se pierden) y se sirve como archivo estático (ver
+// server.js), por eso alcanza con guardar la URL relativa.
 // ============================================================
 
 const express = require('express');
@@ -25,7 +27,7 @@ const router = express.Router();
 router.use(requiereLogin);
 
 const almacenamiento = multer.diskStorage({
-  destination: path.join(__dirname, '..', '..', 'public', 'uploads', 'comprobantes'),
+  destination: path.join(__dirname, '..', '..', 'uploads', 'comprobantes'),
   filename: (req, file, cb) => {
     const sufijo = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
     cb(null, `${sufijo}${path.extname(file.originalname)}`);

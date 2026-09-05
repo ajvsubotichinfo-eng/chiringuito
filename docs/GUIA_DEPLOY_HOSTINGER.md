@@ -33,18 +33,19 @@ El código ya está subido (Claude lo hizo con `git push` en la sesión del 04/0
    | DB_PASSWORD | el mismo valor que en tu `.env` |
    | NODE_ENV | `produccion` |
 5. Guardá y lanzá el **Deploy**.
-6. **Verificación:** abrí la URL de la app. Deberías ver la página de prueba con las DOS tarjetas en verde ✅✅ (servidor + base de datos). Si la de base de datos da ❌, el detalle del error indica el problema (casi siempre `DB_HOST` mal puesto o credenciales mal cargadas en el paso 4).
+6. **Verificación:** abrí la URL de la app. Deberías ver la pantalla de Login del CRM. Si en cambio ves un error de base de datos, el detalle indica el problema (casi siempre `DB_HOST` mal puesto o credenciales mal cargadas en el paso 4).
 
 ## C. Subir una actualización (el flujo de siempre)
 
-Cada vez que Claude te entregue código nuevo o hagas un arreglo a mano:
+Hostinger **no compila nada**: solo corre `npm start` con el código tal cual está en GitHub. Por eso, si el cambio toca el frontend (carpeta `frontend/`), hay que compilarlo ANTES de subir — el resultado ya compilado vive en `/public` y viaja dentro del repositorio.
+
+Cada vez que Claude te entregue código nuevo (Claude hace el `git push` directamente, con tu confirmación) o hagas un arreglo a mano:
 
 1. **Probalo primero en tu PC** (`npm start` → http://localhost:3000).
-2. Entrá a tu repositorio en github.com.
-3. **Add file → Upload files** → arrastrá los archivos modificados (se reemplazan solos al tener el mismo nombre y ruta — respetá las carpetas: si el archivo va en `src/`, subilo dentro de `src/`).
-4. **Commit changes** con un mensajito de qué cambió (ej: "arreglo en comparador").
-5. Hostinger detecta el cambio y **redespliega automáticamente** (puede tardar 1-3 minutos). Si tu panel no tiene auto-deploy activado, entrá a la Web App y tocá el botón de **Redeploy**.
-6. Abrí la app y verificá que el cambio esté.
+2. Si tocaste algo de `frontend/`: `npm run build:frontend` (recompila y actualiza `/public`) — esto hay que hacerlo SIEMPRE antes de subir un cambio de frontend, si no, Hostinger sigue mostrando la versión vieja.
+3. Subir a GitHub — Claude lo hace con `git push`, o a mano: entrá a tu repositorio en <https://github.com/ajvsubotichinfo-eng/chiringuito> → **Add file → Upload files** → arrastrá los archivos modificados (respetá las carpetas) → **Commit changes**.
+4. Hostinger detecta el cambio y **redespliega automáticamente** (puede tardar 1-3 minutos). Si tu panel no tiene auto-deploy activado, entrá a la Web App y tocá el botón de **Redeploy**.
+5. Abrí la app y verificá que el cambio esté.
 
 ## Si algo sale mal después de un deploy
 

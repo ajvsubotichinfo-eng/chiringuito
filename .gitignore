@@ -15,7 +15,12 @@ Thumbs.db
 # Logs
 *.log
 
+# Capturas y sesiones de prueba de playwright-cli (usado por Claude para
+# probar la app en el navegador; no es parte del código del proyecto).
+.playwright-cli/
+
 # Fotos de comprobantes de pago subidas por los usuarios (contenido real
-# de la tienda, no código — no se sube al repositorio).
-public/uploads/comprobantes/*
-!public/uploads/comprobantes/.gitkeep
+# de la tienda, no código — no se sube al repositorio). Vive FUERA de
+# /public a propósito: ese build se pisa en cada deploy de React.
+uploads/comprobantes/*
+!uploads/comprobantes/.gitkeep

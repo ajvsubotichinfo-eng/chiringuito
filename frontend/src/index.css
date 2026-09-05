@@ -1,0 +1,95 @@
+/* ============================================================
+   Estilos base de toda la app.
+   Mobile-first: pensado primero para el celular (mostrador de la
+   tienda), botones grandes fáciles de tocar, colores simples.
+   ============================================================ */
+
+:root {
+  --color-fondo: #faf7f2;
+  --color-superficie: #ffffff;
+  --color-texto: #2b241c;
+  --color-texto-suave: #6b6058;
+  --color-borde: #e3dccf;
+  --color-primario: #a05a2c;
+  --color-primario-oscuro: #7a431f;
+  --color-error: #b3261e;
+  --color-error-fondo: #fbeceb;
+
+  font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+  color-scheme: light;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--color-fondo);
+  color: var(--color-texto);
+}
+
+#root {
+  min-height: 100svh;
+}
+
+h1, h2 {
+  margin: 0 0 16px;
+}
+
+input {
+  width: 100%;
+  padding: 14px;
+  font-size: 16px; /* evita el zoom automático en iOS al tocar el campo */
+  border: 1px solid var(--color-borde);
+  border-radius: 8px;
+  background: var(--color-superficie);
+  color: var(--color-texto);
+}
+
+input:focus {
+  outline: 2px solid var(--color-primario);
+  outline-offset: 1px;
+}
+
+label {
+  display: block;
+  margin: 12px 0 4px;
+  font-size: 14px;
+  color: var(--color-texto-suave);
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.boton-grande {
+  width: 100%;
+  margin-top: 24px;
+  padding: 16px;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: #fff;
+  background: var(--color-primario);
+  border: none;
+  border-radius: 10px;
+}
+
+.boton-grande:active {
+  background: var(--color-primario-oscuro);
+}
+
+.boton-grande:disabled {
+  opacity: 0.6;
+}
+
+.mensaje-error {
+  margin-top: 16px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: var(--color-error-fondo);
+  color: var(--color-error);
+  font-size: 14px;
+}
