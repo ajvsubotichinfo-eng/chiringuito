@@ -83,6 +83,17 @@ app.get('/api/db-test', async (req, res) => {
 });
 
 // ------------------------------------------------------------
+// Cualquier otra ruta (que no sea /api ni un archivo estático) devuelve
+// la app de React. Así funcionan las rutas internas del frontend
+// (ej. /productos, /productos/5) al escribirlas directo en el
+// navegador o al refrescar la página — si no, el servidor no sabe qué
+// contestar y da 404, porque esas rutas solo existen del lado de React.
+// ------------------------------------------------------------
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
+});
+
+// ------------------------------------------------------------
 // Arranque del servidor
 // ------------------------------------------------------------
 app.listen(PORT, () => {

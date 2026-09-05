@@ -12,7 +12,10 @@ import { IconoUsuario } from './Iconos';
 export default function Layout() {
   const { cerrarSesion } = useAuth();
   const { pathname } = useLocation();
-  const activo = ACCESOS.find(acceso => acceso.ruta === pathname);
+  // Las rutas de detalle/formulario (ej. /productos/5) cuelgan de un
+  // acceso de la navegación (/productos); se busca por prefijo, no
+  // por igualdad exacta, para que el título siga siendo el correcto.
+  const activo = ACCESOS.find(acceso => (acceso.ruta === '/' ? pathname === '/' : pathname.startsWith(acceso.ruta)));
 
   return (
     <div className="app-shell">

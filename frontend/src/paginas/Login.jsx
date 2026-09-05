@@ -79,7 +79,7 @@ export default function Login() {
               <IconoTilde className="switch-check" width={14} height={14} />
             </span>
             <span className="switch-texto">
-              Mantenerme conectado 30 días ahoramismo 
+              Mantenerme conectado 30 días
             </span>
           </label>
 
