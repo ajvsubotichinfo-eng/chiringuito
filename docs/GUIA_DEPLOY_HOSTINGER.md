@@ -32,8 +32,9 @@ El código ya está subido (Claude lo hizo con `git push` en la sesión del 04/0
    | DB_USER | el mismo valor que en tu `.env` |
    | DB_PASSWORD | el mismo valor que en tu `.env` |
    | NODE_ENV | `produccion` |
+   | JWT_SECRET | una clave larga y aleatoria, **DISTINTA a la de tu PC** (generarla con `node -e "console.log(require('crypto').randomBytes(48).toString('hex'))"` en tu compu, o pedirle una a Claude). Sin esto el login no funciona: da error aunque el email y la contraseña sean correctos, porque el servidor no puede firmar la sesión |
 5. Guardá y lanzá el **Deploy**.
-6. **Verificación:** abrí la URL de la app. Deberías ver la pantalla de Login del CRM. Si en cambio ves un error de base de datos, el detalle indica el problema (casi siempre `DB_HOST` mal puesto o credenciales mal cargadas en el paso 4).
+6. **Verificación:** abrí la URL de la app. Deberías ver la pantalla de Login del CRM, y poder iniciar sesión. Si ves un error de base de datos, el detalle indica el problema (casi siempre `DB_HOST` mal puesto o credenciales mal cargadas en el paso 4); si el login da error con credenciales correctas, revisá que `JWT_SECRET` esté cargado.
 
 ## C. Subir una actualización (el flujo de siempre)
 
