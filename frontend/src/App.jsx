@@ -13,6 +13,7 @@
 // /proveedores/:id/editar       → editar proveedor
 // /pagos                        → lista de pagos
 // /pagos/nuevo                  → registrar pago (con foto)
+// /configuracion                → ajustes generales (solo admin)
 //
 // Todas las rutas de adentro comparten el mismo Layout (encabezado +
 // navegación) y están protegidas por RutaProtegida: si no hay sesión
@@ -22,6 +23,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './contexto/AuthContext';
 import RutaProtegida from './componentes/RutaProtegida';
+import RutaAdmin from './componentes/RutaAdmin';
 import Layout from './componentes/Layout';
 import Login from './paginas/Login';
 import Comparador from './paginas/Comparador';
@@ -33,6 +35,7 @@ import ProveedorFormulario from './paginas/ProveedorFormulario';
 import ProveedorDetalle from './paginas/ProveedorDetalle';
 import Pagos from './paginas/Pagos';
 import PagoFormulario from './paginas/PagoFormulario';
+import Configuracion from './paginas/Configuracion';
 import './App.css';
 
 export default function App() {
@@ -58,6 +61,10 @@ export default function App() {
 
               <Route path="/pagos" element={<Pagos />} />
               <Route path="/pagos/nuevo" element={<PagoFormulario />} />
+
+              <Route element={<RutaAdmin />}>
+                <Route path="/configuracion" element={<Configuracion />} />
+              </Route>
             </Route>
           </Route>
         </Routes>

@@ -5,7 +5,7 @@
 
 import { useState, useEffect } from 'react';
 import { apiFetch } from '../api';
-import { formatearPesos } from '../utils';
+import { useConfiguracion } from '../contexto/ConfiguracionContext';
 
 const MESES = [
   'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
@@ -22,6 +22,7 @@ function nombreMes(mesIso) {
 }
 
 export default function PagosPorMes() {
+  const { formatearMonto } = useConfiguracion();
   const [mes, setMes] = useState(mesActual());
   const [proveedorId, setProveedorId] = useState('');
   const [proveedores, setProveedores] = useState([]);
@@ -52,7 +53,7 @@ export default function PagosPorMes() {
     <div>
       <div className="tarjeta-total">
         <span className="etiqueta">Total {nombreMes(mes)}</span>
-        <span className="monto-total">{formatearPesos(total)}</span>
+        <span className="monto-total">{formatearMonto(total)}</span>
         <span className="subtexto">
           {cantidadPagos} {cantidadPagos === 1 ? 'pago' : 'pagos'} · {reporte.length} {reporte.length === 1 ? 'proveedor' : 'proveedores'}
         </span>
@@ -88,7 +89,7 @@ export default function PagosPorMes() {
                   {fila.cantidad_pagos} {fila.cantidad_pagos === 1 ? 'pago' : 'pagos'}
                 </span>
               </div>
-              <span style={{ fontWeight: 800 }}>{formatearPesos(fila.total)}</span>
+              <span style={{ fontWeight: 800 }}>{formatearMonto(fila.total)}</span>
             </li>
           ))}
         </ul>

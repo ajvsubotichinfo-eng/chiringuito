@@ -8,11 +8,13 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { apiFetch } from '../api';
-import { formatearPesos, formatearFecha } from '../utils';
+import { formatearFecha } from '../utils';
+import { useConfiguracion } from '../contexto/ConfiguracionContext';
 import { IconoVolver, IconoEditar, IconoMas } from '../componentes/Iconos';
 import FormularioPrecio from '../componentes/FormularioPrecio';
 
 export default function ProductoDetalle() {
+  const { formatearMonto } = useConfiguracion();
   const { id } = useParams();
 
   const [producto, setProducto] = useState(null);
@@ -72,7 +74,7 @@ export default function ProductoDetalle() {
           <h2 className="detalle-titulo">{producto.nombre}</h2>
           <p className="detalle-subtitulo">
             {producto.categoria || 'Sin categoría'}
-            {producto.precio_venta && ` · Precio de venta ${formatearPesos(producto.precio_venta)}`}
+            {producto.precio_venta && ` · Precio de venta ${formatearMonto(producto.precio_venta)}`}
           </p>
         </div>
         <Link to={`/productos/${id}/editar`} className="boton-circulo" aria-label="Editar producto">
@@ -104,12 +106,12 @@ export default function ProductoDetalle() {
                       <span className="proveedor-nombre">{precio.proveedor_nombre}</span>
                       <span className="texto-secundario">
                         {precio.unidad === 'bulto'
-                          ? `por bulto x${precio.cantidad_por_bulto} · ${formatearPesos(precio.precio_compra)}`
+                          ? `por bulto x${precio.cantidad_por_bulto} · ${formatearMonto(precio.precio_compra)}`
                           : 'por unidad'}
                       </span>
                     </div>
                     <div className="precio-grande">
-                      <span>{formatearPesos(precio.precio_unitario)}</span>
+                      <span>{formatearMonto(precio.precio_unitario)}</span>
                       <span className="texto-secundario">/u</span>
                     </div>
                   </div>
@@ -177,7 +179,7 @@ export default function ProductoDetalle() {
                 <div className="fila-historial-datos">
                   <span className="proveedor-nombre" style={{ fontSize: 13 }}>{cambio.proveedor_nombre}</span>
                   <span className="texto-secundario">
-                    {formatearFecha(cambio.fecha_cambio)} · {formatearPesos(cambio.precio_anterior)} → {formatearPesos(cambio.precio_nuevo)}
+                    {formatearFecha(cambio.fecha_cambio)} · {formatearMonto(cambio.precio_anterior)} → {formatearMonto(cambio.precio_nuevo)}
                   </span>
                 </div>
                 <span className={'variacion ' + (cambio.diferencia >= 0 ? 'sube' : 'baja')}>

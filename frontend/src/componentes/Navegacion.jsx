@@ -6,9 +6,9 @@
 //    marca arriba, los accesos en el medio y el usuario abajo.
 // ============================================================
 
-import { NavLink } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 import { useAuth } from '../contexto/AuthContext';
-import { IconoBuscar, IconoProductos, IconoProveedores, IconoPagos, IconoUsuario } from './Iconos';
+import { IconoBuscar, IconoProductos, IconoProveedores, IconoPagos, IconoUsuario, IconoConfiguracion } from './Iconos';
 
 export const ACCESOS = [
   { ruta: '/', Icono: IconoBuscar, etiqueta: 'Comparar', titulo: 'Comparador' },
@@ -44,13 +44,24 @@ export default function Navegacion() {
         ))}
       </div>
 
-      <button type="button" className="nav-usuario" onClick={cerrarSesion}>
-        <span className="nav-usuario-icono"><IconoUsuario width={18} height={18} /></span>
-        <span className="nav-usuario-texto">
-          <span>{usuario?.nombre}</span>
-          <span>Salir</span>
-        </span>
-      </button>
+      <div className="nav-pie">
+        {usuario?.rol === 'admin' && (
+          <Link to="/configuracion" className="nav-usuario">
+            <span className="nav-usuario-icono"><IconoConfiguracion width={18} height={18} /></span>
+            <span className="nav-usuario-texto">
+              <span>Configuración</span>
+            </span>
+          </Link>
+        )}
+
+        <button type="button" className="nav-usuario" onClick={cerrarSesion}>
+          <span className="nav-usuario-icono"><IconoUsuario width={18} height={18} /></span>
+          <span className="nav-usuario-texto">
+            <span>{usuario?.nombre}</span>
+            <span>Salir</span>
+          </span>
+        </button>
+      </div>
     </nav>
   );
 }

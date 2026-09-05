@@ -6,10 +6,12 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { apiFetch } from '../api';
-import { formatearPesos, formatearFecha } from '../utils';
+import { formatearFecha } from '../utils';
+import { useConfiguracion } from '../contexto/ConfiguracionContext';
 import { IconoVolver, IconoEditar } from '../componentes/Iconos';
 
 export default function ProveedorDetalle() {
+  const { formatearMonto } = useConfiguracion();
   const { id } = useParams();
 
   const [proveedor, setProveedor] = useState(null);
@@ -78,7 +80,7 @@ export default function ProveedorDetalle() {
                     </span>
                   </div>
                   <div className="precio-grande" style={{ fontSize: 17 }}>
-                    <span>{formatearPesos(p.precio_unitario)}</span>
+                    <span>{formatearMonto(p.precio_unitario)}</span>
                     <span className="texto-secundario">/u</span>
                   </div>
                 </div>
@@ -103,7 +105,7 @@ export default function ProveedorDetalle() {
                   <span className="proveedor-nombre" style={{ fontSize: 13 }}>{formatearFecha(pago.fecha)}</span>
                   <span className="texto-secundario">{pago.medio_pago}</span>
                 </div>
-                <span style={{ fontWeight: 800 }}>{formatearPesos(pago.monto)}</span>
+                <span style={{ fontWeight: 800 }}>{formatearMonto(pago.monto)}</span>
               </li>
             ))}
           </ul>

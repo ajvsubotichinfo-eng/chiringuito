@@ -119,6 +119,20 @@ CREATE TABLE IF NOT EXISTS pagos (
   CONSTRAINT fk_pagos_usuario   FOREIGN KEY (usuario_id)   REFERENCES usuarios(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- ------------------------------------------------------------
+-- Tabla: configuracion
+-- Clave/valor genérico para ajustes de la app (por ahora, la
+-- moneda). Pensada para poder sumar más ajustes en el futuro sin
+-- tener que crear una columna nueva por cada uno.
+-- ------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS configuracion (
+  clave VARCHAR(50) NOT NULL,
+  valor VARCHAR(255) NOT NULL,
+  PRIMARY KEY (clave)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+INSERT INTO configuracion (clave, valor) VALUES ('moneda', 'ARS');
+
 SET FOREIGN_KEY_CHECKS = 1;
 
 -- ============================================================

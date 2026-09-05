@@ -8,11 +8,13 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { apiFetch } from '../api';
-import { formatearPesos, formatearFecha } from '../utils';
+import { formatearFecha } from '../utils';
+import { useConfiguracion } from '../contexto/ConfiguracionContext';
 import { IconoMas } from '../componentes/Iconos';
 import PagosPorMes from './PagosPorMes';
 
 export default function Pagos() {
+  const { formatearMonto } = useConfiguracion();
   const [pestana, setPestana] = useState('recientes');
   const [pagos, setPagos] = useState([]);
   const [cargando, setCargando] = useState(true);
@@ -58,7 +60,7 @@ export default function Pagos() {
                       )}
                     </span>
                   </div>
-                  <span style={{ fontWeight: 800 }}>{formatearPesos(pago.monto)}</span>
+                  <span style={{ fontWeight: 800 }}>{formatearMonto(pago.monto)}</span>
                 </li>
               ))}
             </ul>

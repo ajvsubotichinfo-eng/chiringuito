@@ -6,10 +6,11 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { apiFetch } from '../api';
-import { formatearPesos } from '../utils';
+import { useConfiguracion } from '../contexto/ConfiguracionContext';
 import { IconoBuscar, IconoMas } from '../componentes/Iconos';
 
 export default function Productos() {
+  const { formatearMonto } = useConfiguracion();
   const [busqueda, setBusqueda] = useState('');
   const [productos, setProductos] = useState([]);
   const [cargando, setCargando] = useState(true);
@@ -55,7 +56,7 @@ export default function Productos() {
                     <span className="item-lista-titulo">{producto.nombre}</span>
                     <span className="texto-secundario">
                       {producto.categoria || 'Sin categoría'}
-                      {producto.precio_venta && ` · ${formatearPesos(producto.precio_venta)}`}
+                      {producto.precio_venta && ` · ${formatearMonto(producto.precio_venta)}`}
                     </span>
                   </div>
                   {!producto.activo && <span className="insignia-inactivo">Inactivo</span>}

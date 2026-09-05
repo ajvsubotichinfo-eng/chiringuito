@@ -8,10 +8,11 @@
 
 import { useState, useEffect } from 'react';
 import { apiFetch } from '../api';
-import { formatearPesos } from '../utils';
+import { useConfiguracion } from '../contexto/ConfiguracionContext';
 import { IconoBuscar, IconoCerrar } from '../componentes/Iconos';
 
 export default function Comparador() {
+  const { formatearMonto } = useConfiguracion();
   const [busqueda, setBusqueda] = useState('');
   const [sugerencias, setSugerencias] = useState([]);
   const [productoElegido, setProductoElegido] = useState(null);
@@ -127,12 +128,12 @@ export default function Comparador() {
                       <span className="proveedor-nombre">{precio.proveedor_nombre}</span>
                       <span className="texto-secundario">
                         {precio.unidad === 'bulto'
-                          ? `por bulto x${precio.cantidad_por_bulto} · ${formatearPesos(precio.precio_compra)}`
+                          ? `por bulto x${precio.cantidad_por_bulto} · ${formatearMonto(precio.precio_compra)}`
                           : 'por unidad'}
                       </span>
                     </div>
                     <div className="precio-grande">
-                      <span>{formatearPesos(precio.precio_unitario)}</span>
+                      <span>{formatearMonto(precio.precio_unitario)}</span>
                       <span className="texto-secundario">/u</span>
                     </div>
                   </div>

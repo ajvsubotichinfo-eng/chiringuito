@@ -51,6 +51,7 @@ Resumen de tablas (detalle completo de columnas en el propio archivo SQL):
 | precios_proveedor ⭐ | Una fila por producto-proveedor con precio, unidad/bulto y cantidad por bulto (comparador de precio unitario real). UNIQUE(producto, proveedor) |
 | historial_precios 📈 | Se llena automáticamente desde la API al modificar un precio: precio anterior, nuevo, fecha y usuario. Diferencia $ y % se calculan al mostrar |
 | pagos | Fecha, proveedor, monto, medio de pago, comprobante (nro + foto), usuario. Filtro mensual por consultas sobre `fecha` |
+| configuracion | Clave/valor genérico para ajustes de la app (por ahora, la moneda). Solo el admin la puede editar |
 
 Fases futuras (aún no crear): facturas_proveedor, movimientos_stock, ventas / detalle_ventas / clientes.
 
@@ -66,7 +67,8 @@ Fases futuras (aún no crear): facturas_proveedor, movimientos_stock, ventas / d
 | 🚚 Proveedores | Lista; el detalle muestra sus productos, precios y pagos recibidos |
 | 💰 Registrar pago | Formulario rápido con foto de comprobante |
 | 📊 Pagos por mes | Totales agrupados por mes y proveedor, con filtros por mes y por proveedor |
-| ⚙️ Administración | Alta/baja de usuarios (solo admin) |
+| ⚙️ Configuración | Ajustes generales, solo admin — hoy: elegir la moneda de la app. Se accede con el ícono de tuerca junto al de usuario |
+| 👤 Administración | Alta/baja de usuarios (solo admin) — todavía no construida |
 
 ---
 
@@ -123,6 +125,8 @@ Fases futuras (aún no crear): facturas_proveedor, movimientos_stock, ventas / d
 - [ ] Exportar resumen mensual de pagos a Excel/PDF para el contador
 - [ ] Backup automático de la base de datos
 - [ ] Web pública de la tienda (si algún día se quiere, ahí sí WordPress/WooCommerce en el dominio principal, conviviendo con el CRM en un subdominio)
+- [x] Agregar una sección de configuraciones para el admin para cambiar el tipo de moneda utilizado — ✅ hecho el 05/09/2026, ver bitácora
+- [ ]
 
 ---
 
@@ -193,3 +197,4 @@ Fases futuras (aún no crear): facturas_proveedor, movimientos_stock, ventas / d
 | 2026-09-05 | Fase 4.5: dashboard de pagos por mes, como pestaña "Por mes" dentro de la pantalla Pagos (`PagosPorMes.jsx`) — tarjeta con el total del mes elegido, filtros de mes y proveedor, y el detalle agrupado por proveedor (`GET /api/reportes/pagos-por-mes`, ya hecho en la Fase 3.6). Probado con datos reales: julio 2026 da $235.500 en 2 pagos a 2 proveedores, coincide exacto; el filtro por proveedor también funciona. |
 | 2026-09-05 | Fase 4.6: configuración PWA — `frontend/public/manifest.webmanifest` (nombre, íconos, color de tema `#01006C`, `display: standalone`) y un service worker mínimo (`public/sw.js`, cachea los archivos de la app pero nunca `/api/` ni `/uploads/`, que siempre necesitan la base real). Se generaron los íconos (192, 512, 512 maskable, apple-touch-icon) con el monograma "FS" ya usado en la app. Se corrigió de paso el `theme-color` del `index.html`, que había quedado con el color índigo viejo (`#3B3AC4`) después del cambio de paleta. Probado: manifest e íconos responden bien, el service worker queda "activated" sin errores de consola. **Fase 4 (frontend) completa.** Con esto está el MVP completo de la Fase 4; falta mergear `feature/rediseno-visual` a `main` para probarlo en producción (Fase 5). |
 | 2026-09-05 | `feature/rediseno-visual` mergeada a `main` y subida — Hostinger redesplegó con el MVP completo (login, Comparador, Productos, Proveedores, Pagos, PWA). **Bug encontrado en producción:** el login daba error con credenciales correctas. Causa: `JWT_SECRET` nunca se agregó a las variables de entorno de la Web App en Hostinger — se sumó al `.env` local recién en la Fase 3.2, después de escribir la guía de deploy (Fase 2), y la guía nunca se actualizó para incluirla. Sin esa variable, el servidor no puede firmar el token de sesión. Se corrigió `docs/GUIA_DEPLOY_HOSTINGER.md` para incluir `JWT_SECRET` en la tabla de variables, y se le pasó al dueño una clave para cargar en hPanel. **Confirmado: el dueño agregó la variable y el login ya funciona en producción.** MVP completo (Fases 1 a 4) funcionando en vivo. |
+| 2026-09-05 | Nueva funcionalidad (del backlog): pantalla de Configuración para que el admin cambie la moneda de toda la app. Tabla nueva `configuracion` (clave/valor genérico, pensada para sumar más ajustes a futuro sin tocar el esquema de nuevo) agregada a `crm_schema.sql` y creada en la base real. Backend: `GET/PUT /api/configuracion` (el PUT valida el código de moneda contra `Intl.supportedValuesOf('currency')`, y requiere admin). Frontend: `contexto/ConfiguracionContext.jsx` (carga la moneda una vez y expone `formatearMonto()`) reemplaza al viejo `formatearPesos()` fijo en pesos en las 7 pantallas que muestran montos; `paginas/Configuracion.jsx` con selector de moneda y vista previa en vivo; ícono de tuerca en el encabezado (celular) y panel lateral (computadora), visible solo para admin; `componentes/RutaAdmin.jsx` bloquea el acceso por URL directa a quien no sea admin. Probado: cambiar a USD actualiza todos los precios sin recargar la página; un usuario con rol "empleado" no ve el ícono, no puede entrar por URL, y el backend rechaza el cambio igual aunque se llame a la API directo — sin errores de consola. |

@@ -8,7 +8,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { apiFetch } from '../api';
-import { formatearPesos } from '../utils';
+import { useConfiguracion } from '../contexto/ConfiguracionContext';
 import { IconoVolver, IconoMas, IconoCerrar } from '../componentes/Iconos';
 
 const MEDIOS = ['Efectivo', 'Transferencia', 'Cheque', 'Mercado Pago'];
@@ -19,6 +19,7 @@ function lineaVacia() {
 
 export default function PagoFormulario() {
   const navegar = useNavigate();
+  const { formatearMonto } = useConfiguracion();
 
   const [proveedores, setProveedores] = useState([]);
   const [proveedorId, setProveedorId] = useState('');
@@ -154,7 +155,7 @@ export default function PagoFormulario() {
         </button>
 
         {lineas.length > 1 && (
-          <p className="total-lineas">Total: {formatearPesos(total)}</p>
+          <p className="total-lineas">Total: {formatearMonto(total)}</p>
         )}
 
         <label htmlFor="foto">Foto del comprobante (opcional)</label>

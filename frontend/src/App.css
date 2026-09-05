@@ -215,6 +215,12 @@
   text-transform: uppercase;
 }
 
+.encabezado-acciones {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 .contenido {
   flex: 1;
   padding: 22px 20px 120px; /* abajo deja lugar para la navegación flotante */
@@ -239,7 +245,7 @@
 }
 
 .nav-marca,
-.nav-usuario {
+.nav-pie {
   display: none;
 }
 
@@ -1036,6 +1042,12 @@
     opacity: 1;
   }
 
+  .nav-pie {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
   .nav-usuario {
     display: flex;
     align-items: center;
@@ -1047,6 +1059,7 @@
     background: rgba(255, 255, 255, 0.10);
     color: #fff;
     text-align: left;
+    text-decoration: none;
   }
 
   .nav-usuario-icono {
