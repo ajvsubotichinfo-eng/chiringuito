@@ -56,6 +56,14 @@ export function IconoPagos(props) {
   );
 }
 
+export function IconoTilde(props) {
+  return (
+    <svg {...base} strokeWidth={3} {...props}>
+      <path d="M5 12l4 4L19 7" />
+    </svg>
+  );
+}
+
 export function IconoUsuario(props) {
   return (
     <svg {...base} {...props}>

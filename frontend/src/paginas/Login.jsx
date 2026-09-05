@@ -7,6 +7,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexto/AuthContext';
+import { IconoTilde } from '../componentes/Iconos';
 
 export default function Login() {
   const { iniciarSesion } = useAuth();
@@ -72,11 +73,14 @@ export default function Login() {
           />
 
           <label className="fila-switch">
-            <input
-              type="checkbox"
-              checked={recordarme}
-              onChange={e => setRecordarme(e.target.checked)}
-            />
+            <span className="switch-caja">
+              <input
+                type="checkbox"
+                checked={recordarme}
+                onChange={e => setRecordarme(e.target.checked)}
+              />
+              <IconoTilde className="switch-check" width={14} height={14} />
+            </span>
             Mantenerme conectado 30 días
           </label>
 

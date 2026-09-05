@@ -54,11 +54,12 @@
   gap: 6px;
   margin-top: 28px;
   text-align: center;
-  font-size: 26px;
+  font-size: 22px;
   font-weight: 800;
-  letter-spacing: 6px;
+  letter-spacing: 4px;
   text-transform: uppercase;
-  line-height: 1.1;
+  line-height: 1.25;
+  white-space: nowrap;
 }
 
 .login-bienvenida {
@@ -88,23 +89,23 @@
 .tarjeta-login input[type="email"],
 .tarjeta-login input[type="password"] {
   width: 100%;
-  height: 44px;
-  padding: 0;
-  border: none;
-  border-bottom: 1.5px solid rgba(255, 255, 255, 0.55);
-  border-radius: 0;
-  background: transparent;
+  height: 52px;
+  padding: 0 18px;
+  border: 1.5px solid rgba(255, 255, 255, 0.30);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.10);
   color: #fff;
   font-weight: 500;
 }
 
 .tarjeta-login input::placeholder {
-  color: rgba(255, 255, 255, 0.45);
+  color: rgba(255, 255, 255, 0.55);
 }
 
 .tarjeta-login input:focus {
   outline: none;
-  border-bottom-color: #fff;
+  border-color: #fff;
+  background: rgba(255, 255, 255, 0.16);
 }
 
 .fila-switch {
@@ -115,6 +116,7 @@
   font-weight: 600;
   color: rgba(255, 255, 255, 0.88);
   line-height: 1.4;
+  cursor: pointer;
 }
 
 .tarjeta-login .fila-switch {
@@ -123,15 +125,46 @@
   letter-spacing: 0;
 }
 
-.fila-switch input {
+/* Checkbox con estilo propio: un cuadrado con borde que, al marcarse,
+   se rellena de blanco y muestra un tilde índigo. El <input> real
+   queda invisible pero clickeable arriba de ese cuadrado. */
+.switch-caja {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   width: 22px;
   height: 22px;
   flex-shrink: 0;
-  accent-color: #fff;
+  border: 2px solid rgba(255, 255, 255, 0.7);
+  border-radius: 7px;
+  background: transparent;
+}
+
+.switch-caja input {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.switch-check {
+  color: var(--color-primario);
+  opacity: 0;
+}
+
+.switch-caja:has(input:checked) {
+  background: #fff;
+  border-color: #fff;
+}
+
+.switch-caja:has(input:checked) .switch-check {
+  opacity: 1;
 }
 
 .tarjeta-login .mensaje-error {
-  background: rgba(255, 255, 255, 0.14);
+  background: #E11D48;
   color: #fff;
 }
 
