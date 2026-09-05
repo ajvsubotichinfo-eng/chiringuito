@@ -120,6 +120,25 @@ CREATE TABLE IF NOT EXISTS pagos (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ------------------------------------------------------------
+-- Tabla: ingresos
+-- Plata que entra por ventas del día (cierre de caja), separada por
+-- medio de cobro. No tiene proveedor ni comprobante porque no es un
+-- pago a un tercero, sino lo recaudado en el mostrador.
+-- ------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS ingresos (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  fecha DATE NOT NULL,
+  monto DECIMAL(12,2) NOT NULL,
+  medio ENUM('Efectivo','Transferencia','Tarjeta/POS','Mercado Pago','Otro') NOT NULL,
+  notas TEXT DEFAULT NULL,
+  usuario_id INT UNSIGNED DEFAULT NULL,
+  creado_en DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  KEY idx_ingresos_fecha (fecha),
+  CONSTRAINT fk_ingresos_usuario FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ------------------------------------------------------------
 -- Tabla: configuracion
 -- Clave/valor genérico para ajustes de la app (por ahora, la
 -- moneda). Pensada para poder sumar más ajustes en el futuro sin

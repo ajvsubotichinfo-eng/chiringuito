@@ -6,20 +6,7 @@
 import { useState, useEffect } from 'react';
 import { apiFetch } from '../api';
 import { useConfiguracion } from '../contexto/ConfiguracionContext';
-
-const MESES = [
-  'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
-  'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
-];
-
-function mesActual() {
-  return new Date().toISOString().slice(0, 7); // "YYYY-MM"
-}
-
-function nombreMes(mesIso) {
-  const [anio, mes] = mesIso.split('-');
-  return `${MESES[Number(mes) - 1]} ${anio}`;
-}
+import { mesActual, nombreMes } from '../utils';
 
 export default function PagosPorMes() {
   const { formatearMonto } = useConfiguracion();

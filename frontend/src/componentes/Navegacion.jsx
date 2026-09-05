@@ -8,13 +8,14 @@
 
 import { NavLink, Link } from 'react-router-dom';
 import { useAuth } from '../contexto/AuthContext';
-import { IconoBuscar, IconoProductos, IconoProveedores, IconoPagos, IconoUsuario, IconoConfiguracion } from './Iconos';
+import { IconoBuscar, IconoProductos, IconoProveedores, IconoPagos, IconoIngresos, IconoUsuario, IconoConfiguracion } from './Iconos';
 
 export const ACCESOS = [
   { ruta: '/', Icono: IconoBuscar, etiqueta: 'Comparar', titulo: 'Comparador' },
   { ruta: '/productos', Icono: IconoProductos, etiqueta: 'Productos', titulo: 'Productos' },
   { ruta: '/proveedores', Icono: IconoProveedores, etiqueta: 'Proveedores', titulo: 'Proveedores' },
-  { ruta: '/pagos', Icono: IconoPagos, etiqueta: 'Pagos', titulo: 'Pagos' }
+  { ruta: '/pagos', Icono: IconoPagos, etiqueta: 'Pagos', titulo: 'Pagos' },
+  { ruta: '/ingresos', Icono: IconoIngresos, etiqueta: 'Ingresos', titulo: 'Ingresos' }
 ];
 
 export default function Navegacion() {

@@ -13,6 +13,8 @@
 // /proveedores/:id/editar       → editar proveedor
 // /pagos                        → lista de pagos
 // /pagos/nuevo                  → registrar pago (con foto)
+// /ingresos                     → lista de ingresos (cierre de caja)
+// /ingresos/nuevo               → registrar ingreso
 // /configuracion                → ajustes generales (solo admin)
 //
 // Todas las rutas de adentro comparten el mismo Layout (encabezado +
@@ -35,6 +37,8 @@ import ProveedorFormulario from './paginas/ProveedorFormulario';
 import ProveedorDetalle from './paginas/ProveedorDetalle';
 import Pagos from './paginas/Pagos';
 import PagoFormulario from './paginas/PagoFormulario';
+import Ingresos from './paginas/Ingresos';
+import IngresoFormulario from './paginas/IngresoFormulario';
 import Configuracion from './paginas/Configuracion';
 import './App.css';
 
@@ -61,6 +65,9 @@ export default function App() {
 
               <Route path="/pagos" element={<Pagos />} />
               <Route path="/pagos/nuevo" element={<PagoFormulario />} />
+
+              <Route path="/ingresos" element={<Ingresos />} />
+              <Route path="/ingresos/nuevo" element={<IngresoFormulario />} />
 
               <Route element={<RutaAdmin />}>
                 <Route path="/configuracion" element={<Configuracion />} />
