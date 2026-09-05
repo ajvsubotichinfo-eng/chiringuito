@@ -18,6 +18,7 @@ import RutaProtegida from './componentes/RutaProtegida';
 import Layout from './componentes/Layout';
 import PantallaProximamente from './componentes/PantallaProximamente';
 import Login from './paginas/Login';
+import Comparador from './paginas/Comparador';
 import './App.css';
 
 export default function App() {
@@ -29,7 +30,7 @@ export default function App() {
 
           <Route element={<RutaProtegida />}>
             <Route element={<Layout />}>
-              <Route path="/" element={<PantallaProximamente titulo="🔍 Comparador" />} />
+              <Route path="/" element={<Comparador />} />
               <Route path="/productos" element={<PantallaProximamente titulo="📦 Productos" />} />
               <Route path="/proveedores" element={<PantallaProximamente titulo="🚚 Proveedores" />} />
               <Route path="/pagos" element={<PantallaProximamente titulo="💰 Pagos" />} />
