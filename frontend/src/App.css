@@ -1,92 +1,219 @@
 /* ============================================================
    Estilos de la estructura de la app: login, encabezado, navegación
-   inferior y el placeholder de pantallas que faltan programar.
+   y pantallas. Primero está la versión para celular; al final, un
+   bloque "@media (min-width: 900px)" con lo que cambia en computadora
+   y tablet horizontal (navegación lateral, contenido más ancho).
    ============================================================ */
 
+/* --- Login (fondo índigo completo) --- */
+
 .pantalla-login {
+  position: relative;
   min-height: 100svh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 24px;
+  padding: 32px;
+  overflow: hidden;
+  background: var(--color-primario);
+  color: #fff;
+}
+
+.login-decoracion {
+  position: absolute;
+  border-radius: 999px;
+  background: var(--color-primario-oscuro);
+}
+
+.login-decoracion-arriba {
+  top: -110px;
+  right: -120px;
+  width: 320px;
+  height: 320px;
+}
+
+.login-decoracion-abajo {
+  bottom: -160px;
+  left: -140px;
+  width: 300px;
+  height: 300px;
 }
 
 .tarjeta-login {
+  position: relative;
   width: 100%;
   max-width: 360px;
-  padding: 32px 24px;
-  background: var(--color-superficie);
-  border: 1px solid var(--color-borde);
-  border-radius: 16px;
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.tarjeta-login h1 {
-  font-size: 22px;
-  line-height: 1.3;
+.login-titulo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 28px;
+  text-align: center;
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  line-height: 1.1;
+}
+
+.login-bienvenida {
+  margin-top: 26px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .tarjeta-login form {
-  text-align: left;
+  width: 100%;
+  margin-top: 48px;
+}
+
+.tarjeta-login label {
+  display: block;
+  margin: 26px 0 4px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.tarjeta-login input[type="email"],
+.tarjeta-login input[type="password"] {
+  width: 100%;
+  height: 44px;
+  padding: 0;
+  border: none;
+  border-bottom: 1.5px solid rgba(255, 255, 255, 0.55);
+  border-radius: 0;
+  background: transparent;
+  color: #fff;
+  font-weight: 500;
+}
+
+.tarjeta-login input::placeholder {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.tarjeta-login input:focus {
+  outline: none;
+  border-bottom-color: #fff;
 }
 
 .fila-switch {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-top: 20px;
+  gap: 12px;
   font-size: 13px;
-  color: var(--color-texto-suave);
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.88);
   line-height: 1.4;
 }
 
-.fila-switch input {
-  width: 20px;
-  height: 20px;
-  flex-shrink: 0;
-  accent-color: var(--color-primario);
+.tarjeta-login .fila-switch {
+  margin-top: 28px;
+  text-transform: none;
+  letter-spacing: 0;
 }
+
+.fila-switch input {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  accent-color: #fff;
+}
+
+.tarjeta-login .mensaje-error {
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+}
+
+.boton-outline {
+  width: 100%;
+  height: 56px;
+  margin-top: 28px;
+  border: 1.5px solid #fff;
+  border-radius: 16px;
+  background: transparent;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+}
+
+.boton-outline:active {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.boton-outline:disabled {
+  opacity: 0.6;
+}
+
+/* --- Estructura general (app logueada) --- */
 
 .app-shell {
   min-height: 100svh;
+}
+
+.app-cuerpo {
   display: flex;
   flex-direction: column;
+  min-height: 100svh;
 }
 
 .encabezado {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 16px;
-  background: var(--color-superficie);
-  border-bottom: 1px solid var(--color-borde);
-  font-weight: 600;
+  padding: 28px 20px 0;
 }
 
-.boton-salir {
-  padding: 8px 14px;
-  font-size: 14px;
-  background: transparent;
-  border: 1px solid var(--color-borde);
-  border-radius: 8px;
-  color: var(--color-texto-suave);
+.titulo-pantalla {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 4px;
+  text-transform: uppercase;
 }
 
 .contenido {
   flex: 1;
-  padding: 16px;
-  padding-bottom: 88px; /* deja lugar para la navegación inferior fija */
+  padding: 22px 20px 120px; /* abajo deja lugar para la navegación flotante */
 }
 
-.navegacion-inferior {
+/* --- Navegación: en celular es la píldora flotante de abajo --- */
+
+.navegacion {
   position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  left: 20px;
+  right: 20px;
+  bottom: 24px;
+  z-index: 10;
   display: flex;
-  background: var(--color-superficie);
-  border-top: 1px solid var(--color-borde);
-  padding-bottom: env(safe-area-inset-bottom); /* celulares con "notch" abajo */
+  align-items: center;
+  height: 72px;
+  padding: 0 8px;
+  border-radius: 28px;
+  background: var(--color-primario);
+  box-shadow: 0 16px 36px rgba(59, 58, 196, 0.35);
+  margin-bottom: env(safe-area-inset-bottom); /* celulares con "notch" abajo */
+}
+
+.nav-marca,
+.nav-usuario {
+  display: none;
+}
+
+.nav-accesos {
+  display: flex;
+  flex: 1;
 }
 
 .acceso-nav {
@@ -94,45 +221,93 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px;
-  padding: 10px 0 8px;
-  font-size: 12px;
-  color: var(--color-texto-suave);
+  gap: 5px;
+  padding: 6px 0;
+  color: #fff;
+  opacity: 0.5;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
   text-decoration: none;
 }
 
 .acceso-nav.activo {
-  color: var(--color-primario);
+  opacity: 1;
 }
 
-.icono-nav {
-  font-size: 22px;
+.solo-celular {
+  display: inline-flex;
 }
+
+/* --- Pantallas que faltan --- */
 
 .pantalla-proximamente {
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
   margin-top: 64px;
   color: var(--color-texto-suave);
 }
 
 /* --- Comparador --- */
 
-.pantalla-comparador input {
-  margin-bottom: 4px;
+.pantalla-comparador {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
 }
 
-.texto-suave {
+.buscador {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 54px;
+  padding: 0 18px;
+  border-radius: 18px;
+  background: var(--color-superficie);
+  box-shadow: var(--sombra-tarjeta);
+}
+
+.buscador-icono {
+  color: var(--color-primario);
+  flex-shrink: 0;
+}
+
+.buscador input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.buscador input:focus {
+  outline: none;
+}
+
+.buscador input::placeholder {
+  font-weight: 500;
   color: var(--color-texto-suave);
-  font-size: 14px;
+}
+
+.buscador-limpiar {
+  display: inline-flex;
+  padding: 4px;
+  border: none;
+  background: none;
+  color: var(--color-texto-suave);
 }
 
 .lista-sugerencias {
   list-style: none;
-  margin: 0;
+  margin: -10px 0 0;
   padding: 0;
   background: var(--color-superficie);
-  border: 1px solid var(--color-borde);
-  border-radius: 10px;
+  border-radius: 18px;
+  box-shadow: var(--sombra-tarjeta);
   overflow: hidden;
 }
 
@@ -143,11 +318,12 @@
 .lista-sugerencias button {
   display: block;
   width: 100%;
-  padding: 14px;
+  padding: 16px 18px;
   text-align: left;
   background: none;
   border: none;
   font-size: 15px;
+  font-weight: 600;
   color: var(--color-texto);
 }
 
@@ -155,34 +331,303 @@
   background: var(--color-fondo);
 }
 
-.lista-precios {
-  list-style: none;
-  margin: 20px 0 0;
-  padding: 0;
-  background: var(--color-superficie);
-  border: 1px solid var(--color-borde);
-  border-radius: 10px;
-  overflow: hidden;
+.fila-etiquetas {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 4px;
+  margin-bottom: -8px;
 }
 
-.fila-precio {
+.fila-etiquetas .texto-suave {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.lista-precios {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.tarjeta-precio {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px;
+  border-radius: var(--radio-tarjeta);
+  background: var(--color-superficie);
+  box-shadow: var(--sombra-tarjeta);
+}
+
+.tarjeta-precio-fila {
   display: flex;
   align-items: center;
   gap: 14px;
-  padding: 14px;
 }
 
-.fila-precio + .fila-precio {
-  border-top: 1px solid var(--color-borde);
-}
-
-.medalla {
-  font-size: 20px;
-  width: 28px;
-  text-align: center;
+.ranking {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  background: var(--color-primario-suave);
+  color: var(--color-primario);
+  font-size: 14px;
+  font-weight: 800;
   flex-shrink: 0;
 }
 
+.tarjeta-precio-datos {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+  min-width: 0;
+}
+
 .proveedor-nombre {
-  font-weight: 600;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.precio-grande {
+  display: flex;
+  align-items: baseline;
+  gap: 3px;
+  font-size: 24px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.barra {
+  flex: 1;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--color-primario-suave);
+}
+
+.barra-relleno {
+  height: 6px;
+  border-radius: 3px;
+  background: var(--color-primario);
+  transition: width 0.4s ease;
+}
+
+.insignia {
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: var(--color-primario-suave);
+  color: var(--color-primario);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* El más barato: tarjeta índigo con texto blanco. */
+.tarjeta-precio.destacada {
+  background: var(--color-primario);
+  color: #fff;
+  box-shadow: var(--sombra-primaria);
+}
+
+.tarjeta-precio.destacada .ranking,
+.tarjeta-precio.destacada .insignia {
+  background: #fff;
+  color: var(--color-primario);
+}
+
+.tarjeta-precio.destacada .insignia {
+  letter-spacing: 2px;
+  font-size: 9px;
+}
+
+.tarjeta-precio.destacada .texto-secundario {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.tarjeta-precio.destacada .barra {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.tarjeta-precio.destacada .barra-relleno {
+  background: #fff;
+}
+
+/* ============================================================
+   COMPUTADORA Y TABLET HORIZONTAL (900px o más de ancho):
+   la navegación pasa a ser un panel lateral, el contenido se
+   ensancha y las tarjetas del comparador van en columnas.
+   ============================================================ */
+
+@media (min-width: 900px) {
+  .app-shell {
+    display: flex;
+  }
+
+  .navegacion {
+    position: sticky;
+    top: 24px;
+    left: auto;
+    right: auto;
+    bottom: auto;
+    align-self: flex-start;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 232px;
+    height: calc(100svh - 48px);
+    margin: 24px 0 24px 24px;
+    padding: 28px 16px 24px;
+    box-shadow: var(--sombra-primaria);
+  }
+
+  .nav-marca {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 8px;
+    margin-bottom: 36px;
+  }
+
+  .nav-marca-texto {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+
+  .nav-marca-texto span + span {
+    font-size: 9px;
+    font-weight: 700;
+    opacity: 0.7;
+  }
+
+  .nav-accesos {
+    flex-direction: column;
+    gap: 6px;
+    flex: 1;
+  }
+
+  .acceso-nav {
+    flex: 0 0 auto;
+    flex-direction: row;
+    gap: 14px;
+    height: 52px;
+    padding: 0 16px;
+    border-radius: 16px;
+    opacity: 0.6;
+    font-size: 10px;
+    letter-spacing: 3px;
+  }
+
+  .acceso-nav.activo {
+    background: #fff;
+    color: var(--color-primario);
+    opacity: 1;
+  }
+
+  .nav-usuario {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 14px 12px;
+    border: none;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.10);
+    color: #fff;
+    text-align: left;
+  }
+
+  .nav-usuario-icono {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.18);
+    flex-shrink: 0;
+  }
+
+  .nav-usuario-texto {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .nav-usuario-texto span + span {
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    opacity: 0.65;
+  }
+
+  .app-cuerpo {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .solo-celular {
+    display: none;
+  }
+
+  .encabezado {
+    padding: 44px 56px 0;
+  }
+
+  .titulo-pantalla {
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--color-texto-suave);
+  }
+
+  .contenido {
+    padding: 20px 56px 40px;
+    max-width: 1200px;
+  }
+
+  .buscador,
+  .lista-sugerencias {
+    max-width: 640px;
+  }
+
+  .lista-precios {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+  }
+
+  .tarjeta-precio {
+    gap: 22px;
+    padding: 26px;
+  }
+
+  .tarjeta-precio-fila {
+    flex-wrap: wrap;
+  }
+
+  .proveedor-nombre {
+    font-size: 17px;
+  }
+
+  .precio-grande {
+    width: 100%;
+    font-size: 34px;
+  }
 }

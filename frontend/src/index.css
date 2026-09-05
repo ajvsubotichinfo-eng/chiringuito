@@ -1,21 +1,29 @@
 /* ============================================================
    Estilos base de toda la app.
-   Mobile-first: pensado primero para el celular (mostrador de la
-   tienda), botones grandes fáciles de tocar, colores simples.
+   Identidad visual (maqueta aprobada el 04/09/2026): índigo profundo
+   como color principal, fondo gris muy claro, tarjetas blancas muy
+   redondeadas con sombra suave, títulos en mayúsculas espaciadas,
+   números grandes. Pensado primero para el celular (mostrador de la
+   tienda) y adaptado a computadora en App.css.
    ============================================================ */
 
 :root {
-  --color-fondo: #faf7f2;
-  --color-superficie: #ffffff;
-  --color-texto: #2b241c;
-  --color-texto-suave: #6b6058;
-  --color-borde: #e3dccf;
-  --color-primario: #a05a2c;
-  --color-primario-oscuro: #7a431f;
-  --color-error: #b3261e;
-  --color-error-fondo: #fbeceb;
+  --color-primario: #3B3AC4;
+  --color-primario-oscuro: #2F2EA6;
+  --color-primario-suave: #ECEBFF;
+  --color-fondo: #F3F4F8;
+  --color-superficie: #FFFFFF;
+  --color-texto: #15152E;
+  --color-texto-suave: #8B8CA7;
+  --color-borde: #E6E7EF;
+  --color-error: #B3261E;
+  --color-error-fondo: #FBECEB;
 
-  font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --sombra-tarjeta: 0 10px 30px rgba(59, 58, 196, 0.10);
+  --sombra-primaria: 0 16px 36px rgba(59, 58, 196, 0.32);
+  --radio-tarjeta: 24px;
+
+  font-family: 'Montserrat', 'Segoe UI', system-ui, sans-serif;
   color-scheme: light;
 }
 
@@ -33,30 +41,8 @@ body {
   min-height: 100svh;
 }
 
-h1, h2 {
-  margin: 0 0 16px;
-}
-
-input {
-  width: 100%;
-  padding: 14px;
-  font-size: 16px; /* evita el zoom automático en iOS al tocar el campo */
-  border: 1px solid var(--color-borde);
-  border-radius: 8px;
-  background: var(--color-superficie);
-  color: var(--color-texto);
-}
-
-input:focus {
-  outline: 2px solid var(--color-primario);
-  outline-offset: 1px;
-}
-
-label {
-  display: block;
-  margin: 12px 0 4px;
-  font-size: 14px;
-  color: var(--color-texto-suave);
+h1, h2, p {
+  margin: 0;
 }
 
 button {
@@ -64,32 +50,83 @@ button {
   cursor: pointer;
 }
 
-.boton-grande {
-  width: 100%;
-  margin-top: 24px;
-  padding: 16px;
-  font-size: 16px;
+input {
+  font-family: inherit;
+  font-size: 16px; /* evita el zoom automático en iOS al tocar el campo */
+  color: var(--color-texto);
+}
+
+/* Etiquetas chicas en mayúsculas espaciadas (el sello del diseño). */
+.etiqueta {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--color-texto-suave);
+}
+
+.texto-suave {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-texto-suave);
+}
+
+.texto-secundario {
+  font-size: 11px;
   font-weight: 600;
-  letter-spacing: 0.5px;
-  color: #fff;
+  color: var(--color-texto-suave);
+}
+
+.texto-centrado {
+  text-align: center;
+}
+
+.monograma {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
   background: var(--color-primario);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  flex-shrink: 0;
+}
+
+.monograma-claro {
+  background: #fff;
+  color: var(--color-primario);
+}
+
+.monograma-grande {
+  width: 60px;
+  height: 60px;
+  font-size: 16px;
+  letter-spacing: 3px;
+}
+
+.boton-circulo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
   border: none;
-  border-radius: 10px;
-}
-
-.boton-grande:active {
-  background: var(--color-primario-oscuro);
-}
-
-.boton-grande:disabled {
-  opacity: 0.6;
+  border-radius: 999px;
+  background: var(--color-superficie);
+  color: var(--color-primario);
+  box-shadow: 0 8px 24px rgba(59, 58, 196, 0.10);
 }
 
 .mensaje-error {
   margin-top: 16px;
-  padding: 10px 12px;
-  border-radius: 8px;
+  padding: 12px 14px;
+  border-radius: 12px;
   background: var(--color-error-fondo);
   color: var(--color-error);
-  font-size: 14px;
+  font-size: 13px;
+  font-weight: 600;
 }
