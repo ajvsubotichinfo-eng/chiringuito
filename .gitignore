@@ -19,6 +19,10 @@ Thumbs.db
 # probar la app en el navegador; no es parte del código del proyecto).
 .playwright-cli/
 
+# Configuración local de Claude Code (lanza el servidor de prueba en el
+# navegador); no es parte del código del proyecto.
+.claude/
+
 # Fotos de comprobantes de pago subidas por los usuarios (contenido real
 # de la tienda, no código — no se sube al repositorio). Vive FUERA de
 # /public a propósito: ese build se pisa en cada deploy de React.

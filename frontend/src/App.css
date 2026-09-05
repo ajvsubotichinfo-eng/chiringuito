@@ -114,3 +114,75 @@
   margin-top: 64px;
   color: var(--color-texto-suave);
 }
+
+/* --- Comparador --- */
+
+.pantalla-comparador input {
+  margin-bottom: 4px;
+}
+
+.texto-suave {
+  color: var(--color-texto-suave);
+  font-size: 14px;
+}
+
+.lista-sugerencias {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.lista-sugerencias li + li {
+  border-top: 1px solid var(--color-borde);
+}
+
+.lista-sugerencias button {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  text-align: left;
+  background: none;
+  border: none;
+  font-size: 15px;
+  color: var(--color-texto);
+}
+
+.lista-sugerencias button:active {
+  background: var(--color-fondo);
+}
+
+.lista-precios {
+  list-style: none;
+  margin: 20px 0 0;
+  padding: 0;
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.fila-precio {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px;
+}
+
+.fila-precio + .fila-precio {
+  border-top: 1px solid var(--color-borde);
+}
+
+.medalla {
+  font-size: 20px;
+  width: 28px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.proveedor-nombre {
+  font-weight: 600;
+}

@@ -1,7 +1,7 @@
 # CRM Tienda — Plan y Manual del Proyecto
 
 **Última actualización:** 04 de septiembre de 2026
-**Estado general:** 🚧 Fases 1, 2 y 3 completas; Fase 4 en curso — proyecto React base con login y navegación funcionando (4.1). Siguen las pantallas Comparador, Productos/Proveedores y Pagos, cada una con su maqueta previa
+**Estado general:** 🚧 Fases 1, 2 y 3 completas; Fase 4 en curso — login, navegación (4.1) y pantalla Comparador (4.2) funcionando. Siguen las pantallas Productos/Proveedores y Pagos, cada una con su maqueta previa
 **Stack (DECISIÓN FINAL ✅):** React (frontend) + Node.js/Express (backend API) + MySQL
 **Despliegue:** Web App en Hostinger, plan Business Web Hosting, conectada a GitHub (deploy automático)
 **Usuarios:** Dueño + 1-2 personas
@@ -98,7 +98,7 @@ Fases futuras (aún no crear): facturas_proveedor, movimientos_stock, ventas / d
 ### ⏳ Fase 4 — Frontend (React)
 *Método por pantalla: maqueta rápida en el chat → feedback/aprobación → programación.*
 - [x] 4.1 Proyecto base, login y navegación
-- [ ] 4.2 Pantalla Comparador
+- [x] 4.2 Pantalla Comparador
 - [ ] 4.3 Pantallas Productos y Proveedores (con historial de precios)
 - [ ] 4.4 Formulario de pagos
 - [ ] 4.5 Dashboard de pagos por mes con filtros
@@ -181,3 +181,4 @@ Fases futuras (aún no crear): facturas_proveedor, movimientos_stock, ventas / d
 | 2026-09-04 | Fase 3.6: endpoint de reportes (`src/rutas/reportes.js`) — `GET /api/reportes/pagos-por-mes`, total y cantidad de pagos agrupados por mes y proveedor, con filtros opcionales por mes y por proveedor. **Fase 3 (backend) completa.** Próximo paso: Fase 4 (frontend React) — empezar por la maqueta de la pantalla de Login para aprobación del dueño. |
 | 2026-09-04 | Fase 4.1: maqueta de Login + navegación inferior aprobada por el dueño. Se creó `frontend/` (React + Vite + react-router-dom), compilando directo a `/public` (`npm run build:frontend` desde la raíz). Se armó: login funcional contra `/api/login`, contexto de sesión (token en localStorage), rutas protegidas, layout con encabezado + navegación inferior (Buscar/Productos/Proveedores/Pagos), y pantallas placeholder "Próximamente" para las secciones que faltan. **Importante:** las fotos de comprobantes (`uploads/comprobantes/`) se movieron fuera de `/public` a un directorio propio en la raíz, porque el build de React vacía `/public` en cada compilación (`emptyOutDir`) y hubiera borrado las fotos ya subidas en cada deploy. `server.js` ahora sirve `/uploads` como un estático aparte. Probado de punta a punta en el navegador (playwright-cli): login correcto, error con contraseña incorrecta, navegación, y logout — todo verificado con capturas de pantalla en escritorio y en tamaño celular. |
 | 2026-09-04 | Ajuste al login (pedido del dueño, antes de arrancar 4.2): switch "Mantenerme conectado 30 días" pensado para cuando se usa desde una computadora personal. `POST /api/login` acepta `recordarme`; si es `true` el token JWT dura 30 días en vez de las 12 horas por defecto. Frontend: checkbox en el Login, y `api.js` ahora redirige solo a `/login` si el token vence (antes dejaba la pantalla colgada con datos viejos). Probado: token de 12h sin el switch, 30 días marcándolo, confirmado tanto en la respuesta del backend como en el token guardado tras loguearse desde el navegador. |
+| 2026-09-04 | Fase 4.2: pantalla Comparador (`frontend/src/paginas/Comparador.jsx`) — buscador de producto con sugerencias mientras se escribe (debounce 300ms contra `GET /api/productos?q=`), y al elegir uno muestra los proveedores que lo venden ordenados del más barato al más caro (`GET /api/precios/comparar/:id`), con medallas 🥇🥈🥉 para el top 3 y precio unitario real aclarando cuando el proveedor vende por bulto. Se agregó `frontend/src/utils.js` con `formatearPesos()` (Intl, pesos sin decimales) para reusar en las próximas pantallas. **Fase 4.2 completa.** Próximo paso: Fase 4.3 (pantallas Productos y Proveedores con historial de precios) — empezar por la maqueta para aprobación del dueño. |
