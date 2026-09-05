@@ -802,6 +802,59 @@
   cursor: pointer;
 }
 
+/* --- Pestañas (Pagos: Recientes / Por mes) --- */
+
+.pestanas {
+  display: flex;
+  gap: 8px;
+}
+
+.pestana {
+  flex: 1;
+  height: 44px;
+  border: none;
+  border-radius: 12px;
+  background: var(--color-superficie);
+  box-shadow: var(--sombra-tarjeta);
+  color: var(--color-texto-suave);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.pestana.activa {
+  background: var(--color-primario);
+  color: #fff;
+}
+
+/* --- Tarjeta de total (dashboard de pagos por mes) --- */
+
+.tarjeta-total {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 26px 24px;
+  margin-top: 16px;
+  border-radius: var(--radio-tarjeta);
+  background: var(--color-primario);
+  color: #fff;
+  box-shadow: var(--sombra-primaria);
+}
+
+.tarjeta-total .etiqueta {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.monto-total {
+  font-size: 34px;
+  font-weight: 800;
+}
+
+.subtexto {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.72);
+}
+
 /* --- Historial de precios --- */
 
 .lista-historial {
