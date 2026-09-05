@@ -19,6 +19,10 @@
 // GET  /api/precios/historial?producto_id=X&proveedor_id=Y (opcional)
 //      → historial de cambios, con la diferencia en $ y % ya calculada,
 //        del más reciente al más viejo.
+//
+// GET  /api/precios/proveedor/:proveedorId
+//      → todos los productos que le compramos a ese proveedor, con el
+//        precio de cada uno. Para la pantalla de detalle de Proveedores.
 // ============================================================
 
 const express = require('express');
@@ -59,6 +63,30 @@ router.get('/comparar/:productoId', async (req, res) => {
     res.json({ ok: true, precios: conPrecioUnitario });
   } catch (error) {
     res.status(500).json({ ok: false, mensaje: 'Error al comparar precios', detalle: error.code || error.message });
+  }
+});
+
+router.get('/proveedor/:proveedorId', async (req, res) => {
+  try {
+    const [filas] = await pool.query(
+      `SELECT pp.id, pp.producto_id, prod.nombre AS producto_nombre,
+              pp.precio_compra, pp.unidad, pp.cantidad_por_bulto,
+              pp.fecha_actualizacion, pp.notas
+       FROM precios_proveedor pp
+       JOIN productos prod ON prod.id = pp.producto_id
+       WHERE pp.proveedor_id = ? AND prod.activo = 1
+       ORDER BY prod.nombre`,
+      [req.params.proveedorId]
+    );
+
+    const conPrecioUnitario = filas.map(fila => ({
+      ...fila,
+      precio_unitario: Number(precioUnitario(fila).toFixed(2))
+    }));
+
+    res.json({ ok: true, precios: conPrecioUnitario });
+  } catch (error) {
+    res.status(500).json({ ok: false, mensaje: 'Error al listar los precios del proveedor', detalle: error.code || error.message });
   }
 });
 
