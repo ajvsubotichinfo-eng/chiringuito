@@ -3,7 +3,14 @@
 //
 // GET    /api/productos        → lista (con búsqueda opcional ?q=texto)
 // GET    /api/productos/:id    → un producto puntual
-// POST   /api/productos        → crear
+// POST   /api/productos        → crear — junto con su primer proveedor y
+//                                 precio, en una misma transacción. Nunca
+//                                 se crea un producto sin al menos un
+//                                 precio cargado (evita productos "fantasma"
+//                                 sin ningún proveedor, y frena duplicados
+//                                 por accidente: el frontend hace buscar
+//                                 primero en la lista existente antes de
+//                                 ofrecer crear uno nuevo).
 // PUT    /api/productos/:id    → editar (incluye activar/desactivar
 //                                 mandando el campo "activo")
 // ============================================================
@@ -47,21 +54,42 @@ router.get('/:id', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-  const { nombre, categoria, codigo_barras, precio_venta, foto_url } = req.body;
+  const {
+    nombre, categoria, codigo_barras, precio_venta, foto_url,
+    proveedor_id, precio_compra, unidad, cantidad_por_bulto
+  } = req.body;
 
   if (!nombre) {
     return res.status(400).json({ ok: false, mensaje: 'Falta el nombre del producto' });
   }
+  if (!proveedor_id || !precio_compra) {
+    return res.status(400).json({ ok: false, mensaje: 'Todo producto nuevo necesita un proveedor y un precio de compra' });
+  }
 
+  const conexion = await pool.getConnection();
   try {
-    const [resultado] = await pool.query(
+    await conexion.beginTransaction();
+
+    const [resultadoProducto] = await conexion.query(
       `INSERT INTO productos (nombre, categoria, codigo_barras, precio_venta, foto_url)
        VALUES (?, ?, ?, ?, ?)`,
       [nombre, categoria || null, codigo_barras || null, precio_venta || null, foto_url || null]
     );
-    res.status(201).json({ ok: true, id: resultado.insertId });
+    const productoId = resultadoProducto.insertId;
+
+    await conexion.query(
+      `INSERT INTO precios_proveedor (producto_id, proveedor_id, precio_compra, unidad, cantidad_por_bulto, fecha_actualizacion)
+       VALUES (?, ?, ?, ?, ?, CURDATE())`,
+      [productoId, proveedor_id, precio_compra, unidad || 'unidad', cantidad_por_bulto || null]
+    );
+
+    await conexion.commit();
+    res.status(201).json({ ok: true, id: productoId });
   } catch (error) {
+    await conexion.rollback();
     res.status(500).json({ ok: false, mensaje: 'Error al crear el producto', detalle: error.code || error.message });
+  } finally {
+    conexion.release();
   }
 });
 
