@@ -30,6 +30,23 @@
   text-align: left;
 }
 
+.fila-switch {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+  font-size: 13px;
+  color: var(--color-texto-suave);
+  line-height: 1.4;
+}
+
+.fila-switch input {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  accent-color: var(--color-primario);
+}
+
 .app-shell {
   min-height: 100svh;
   display: flex;

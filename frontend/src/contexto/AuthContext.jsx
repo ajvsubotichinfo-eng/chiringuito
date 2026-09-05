@@ -18,10 +18,10 @@ export function AuthProvider({ children }) {
     return guardado ? JSON.parse(guardado) : null;
   });
 
-  async function iniciarSesion(email, password) {
+  async function iniciarSesion(email, password, recordarme) {
     const respuesta = await apiFetch('/api/login', {
       method: 'POST',
-      body: { email, password }
+      body: { email, password, recordarme }
     });
 
     if (respuesta.ok) {

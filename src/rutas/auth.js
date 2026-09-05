@@ -4,7 +4,10 @@
 // POST /api/login: recibe email + contraseña, los compara contra la
 // base (la contraseña está guardada hasheada con bcrypt, nunca en
 // texto plano) y devuelve un token JWT que el frontend guarda y manda
-// en cada petición siguiente para probar que está logueado.
+// en cada petición siguiente para probar que está logueado. Si manda
+// "recordarme: true" (switch "Mantenerme conectado" del login), el
+// token dura 30 días en vez de 12 horas — pensado para cuando alguien
+// entra desde su propia computadora y no quiere loguearse seguido.
 //
 // GET /api/perfil: ruta protegida de prueba, devuelve los datos del
 // usuario logueado según el token. Sirve para confirmar que el login
@@ -20,7 +23,7 @@ const { requiereLogin } = require('../middleware/autenticacion');
 const router = express.Router();
 
 router.post('/login', async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, recordarme } = req.body;
 
   if (!email || !password) {
     return res.status(400).json({ ok: false, mensaje: 'Faltan el email o la contraseña' });
@@ -47,7 +50,7 @@ router.post('/login', async (req, res) => {
     const token = jwt.sign(
       { id: usuario.id, nombre: usuario.nombre, rol: usuario.rol },
       process.env.JWT_SECRET,
-      { expiresIn: '12h' }
+      { expiresIn: recordarme ? '30d' : '12h' }
     );
 
     res.json({

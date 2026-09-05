@@ -14,6 +14,7 @@ export default function Login() {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [recordarme, setRecordarme] = useState(false);
   const [error, setError] = useState('');
   const [cargando, setCargando] = useState(false);
 
@@ -22,7 +23,7 @@ export default function Login() {
     setError('');
     setCargando(true);
 
-    const respuesta = await iniciarSesion(email, password);
+    const respuesta = await iniciarSesion(email, password, recordarme);
 
     setCargando(false);
 
@@ -58,6 +59,15 @@ export default function Login() {
             autoComplete="current-password"
             required
           />
+
+          <label className="fila-switch">
+            <input
+              type="checkbox"
+              checked={recordarme}
+              onChange={e => setRecordarme(e.target.checked)}
+            />
+            Mantenerme conectado 30 días (solo en tu computadora personal)
+          </label>
 
           {error && <p className="mensaje-error">{error}</p>}
 

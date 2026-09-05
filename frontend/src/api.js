@@ -39,8 +39,14 @@ export async function apiFetch(ruta, opciones = {}) {
 
   const respuesta = await fetch(ruta, { ...opciones, headers: encabezados, body });
 
+  // Si la sesión venció (o el token es inválido), se limpia y se manda
+  // directo al login en vez de dejar la pantalla mostrando datos viejos.
   if (respuesta.status === 401) {
     borrarToken();
+    localStorage.removeItem('crm_usuario');
+    if (!ruta.includes('/api/login') && window.location.pathname !== '/login') {
+      window.location.href = '/login';
+    }
   }
 
   const datos = await respuesta.json();
