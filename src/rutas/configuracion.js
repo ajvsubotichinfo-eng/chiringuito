@@ -11,6 +11,7 @@
 const express = require('express');
 const { pool } = require('../config/db');
 const { requiereLogin, requiereAdmin } = require('../middleware/autenticacion');
+const { TENANT_ID_ACTUAL } = require('../config/tenant');
 
 const router = express.Router();
 
@@ -18,7 +19,7 @@ router.use(requiereLogin);
 
 router.get('/', async (req, res) => {
   try {
-    const [filas] = await pool.query('SELECT clave, valor FROM configuracion');
+    const [filas] = await pool.query('SELECT clave, valor FROM configuracion WHERE tenant_id = ?', [TENANT_ID_ACTUAL]);
     const configuracion = Object.fromEntries(filas.map(fila => [fila.clave, fila.valor]));
     res.json({ ok: true, configuracion });
   } catch (error) {
@@ -43,8 +44,8 @@ router.put('/', requiereAdmin, async (req, res) => {
 
   try {
     await pool.query(
-      'INSERT INTO configuracion (clave, valor) VALUES (?, ?) ON DUPLICATE KEY UPDATE valor = VALUES(valor)',
-      ['moneda', codigo]
+      'INSERT INTO configuracion (tenant_id, clave, valor) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE valor = VALUES(valor)',
+      [TENANT_ID_ACTUAL, 'moneda', codigo]
     );
     res.json({ ok: true });
   } catch (error) {

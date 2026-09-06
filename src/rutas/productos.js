@@ -18,6 +18,7 @@
 const express = require('express');
 const { pool } = require('../config/db');
 const { requiereLogin } = require('../middleware/autenticacion');
+const { TENANT_ID_ACTUAL } = require('../config/tenant');
 
 const router = express.Router();
 
@@ -71,16 +72,16 @@ router.post('/', async (req, res) => {
     await conexion.beginTransaction();
 
     const [resultadoProducto] = await conexion.query(
-      `INSERT INTO productos (nombre, categoria, codigo_barras, precio_venta, foto_url)
-       VALUES (?, ?, ?, ?, ?)`,
-      [nombre, categoria || null, codigo_barras || null, precio_venta || null, foto_url || null]
+      `INSERT INTO productos (tenant_id, nombre, categoria, codigo_barras, precio_venta, foto_url)
+       VALUES (?, ?, ?, ?, ?, ?)`,
+      [TENANT_ID_ACTUAL, nombre, categoria || null, codigo_barras || null, precio_venta || null, foto_url || null]
     );
     const productoId = resultadoProducto.insertId;
 
     await conexion.query(
-      `INSERT INTO precios_proveedor (producto_id, proveedor_id, precio_compra, unidad, cantidad_por_bulto, fecha_actualizacion)
-       VALUES (?, ?, ?, ?, ?, CURDATE())`,
-      [productoId, proveedor_id, precio_compra, unidad || 'unidad', cantidad_por_bulto || null]
+      `INSERT INTO precios_proveedor (tenant_id, producto_id, proveedor_id, precio_compra, unidad, cantidad_por_bulto, fecha_actualizacion)
+       VALUES (?, ?, ?, ?, ?, ?, CURDATE())`,
+      [TENANT_ID_ACTUAL, productoId, proveedor_id, precio_compra, unidad || 'unidad', cantidad_por_bulto || null]
     );
 
     await conexion.commit();

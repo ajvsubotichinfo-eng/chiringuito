@@ -28,6 +28,7 @@
 const express = require('express');
 const { pool } = require('../config/db');
 const { requiereLogin } = require('../middleware/autenticacion');
+const { TENANT_ID_ACTUAL } = require('../config/tenant');
 
 const router = express.Router();
 
@@ -100,9 +101,9 @@ router.post('/', async (req, res) => {
   try {
     const [resultado] = await pool.query(
       `INSERT INTO precios_proveedor
-         (producto_id, proveedor_id, precio_compra, unidad, cantidad_por_bulto, fecha_actualizacion, notas)
-       VALUES (?, ?, ?, ?, ?, CURDATE(), ?)`,
-      [producto_id, proveedor_id, precio_compra, unidad || 'unidad', cantidad_por_bulto || null, notas || null]
+         (tenant_id, producto_id, proveedor_id, precio_compra, unidad, cantidad_por_bulto, fecha_actualizacion, notas)
+       VALUES (?, ?, ?, ?, ?, ?, CURDATE(), ?)`,
+      [TENANT_ID_ACTUAL, producto_id, proveedor_id, precio_compra, unidad || 'unidad', cantidad_por_bulto || null, notas || null]
     );
     res.status(201).json({ ok: true, id: resultado.insertId });
   } catch (error) {
@@ -138,9 +139,9 @@ router.put('/:id', async (req, res) => {
     // Solo se registra en el historial si el precio realmente cambió.
     if (Number(actual.precio_compra) !== Number(precio_compra)) {
       await conexion.query(
-        `INSERT INTO historial_precios (producto_id, proveedor_id, precio_anterior, precio_nuevo, usuario_id)
-         VALUES (?, ?, ?, ?, ?)`,
-        [actual.producto_id, actual.proveedor_id, actual.precio_compra, precio_compra, req.usuario.id]
+        `INSERT INTO historial_precios (tenant_id, producto_id, proveedor_id, precio_anterior, precio_nuevo, usuario_id)
+         VALUES (?, ?, ?, ?, ?, ?)`,
+        [TENANT_ID_ACTUAL, actual.producto_id, actual.proveedor_id, actual.precio_compra, precio_compra, req.usuario.id]
       );
     }
 

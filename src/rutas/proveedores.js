@@ -11,6 +11,7 @@
 const express = require('express');
 const { pool } = require('../config/db');
 const { requiereLogin } = require('../middleware/autenticacion');
+const { TENANT_ID_ACTUAL } = require('../config/tenant');
 
 const router = express.Router();
 
@@ -55,9 +56,9 @@ router.post('/', async (req, res) => {
 
   try {
     const [resultado] = await pool.query(
-      `INSERT INTO proveedores (nombre, contacto, telefono, email, dia_visita, notas)
-       VALUES (?, ?, ?, ?, ?, ?)`,
-      [nombre, contacto || null, telefono || null, email || null, dia_visita || null, notas || null]
+      `INSERT INTO proveedores (tenant_id, nombre, contacto, telefono, email, dia_visita, notas)
+       VALUES (?, ?, ?, ?, ?, ?, ?)`,
+      [TENANT_ID_ACTUAL, nombre, contacto || null, telefono || null, email || null, dia_visita || null, notas || null]
     );
     res.status(201).json({ ok: true, id: resultado.insertId });
   } catch (error) {

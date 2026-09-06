@@ -8,10 +8,30 @@ SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- ------------------------------------------------------------
+-- Tabla: tenants
+-- Cada comercio que usa el sistema (hoy: uno solo, Carmen T).
+-- Ver docs/arquitectura-multi-tenant/01-SPEC-multi-tenant-fase1.md
+-- ------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS tenants (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  nombre_comercial VARCHAR(255) NOT NULL,
+  pais CHAR(2) NOT NULL,
+  moneda CHAR(3) NOT NULL,
+  idioma VARCHAR(10) NOT NULL,
+  estado ENUM('activo','inactivo') NOT NULL DEFAULT 'activo',
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+INSERT INTO tenants (nombre_comercial, pais, moneda, idioma) VALUES
+('Frutos Secos Carmen T', 'AR', 'ARS', 'es-AR');
+
+-- ------------------------------------------------------------
 -- Tabla: usuarios
 -- ------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS usuarios (
   id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  tenant_id INT UNSIGNED NOT NULL,
   nombre VARCHAR(100) NOT NULL,
   email VARCHAR(150) NOT NULL,
   password_hash VARCHAR(255) NOT NULL,
@@ -19,7 +39,9 @@ CREATE TABLE IF NOT EXISTS usuarios (
   activo TINYINT(1) NOT NULL DEFAULT 1,
   creado_en DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
-  UNIQUE KEY uq_usuarios_email (email)
+  UNIQUE KEY uq_usuarios_email (email),
+  KEY idx_usuarios_tenant (tenant_id),
+  CONSTRAINT fk_usuarios_tenant FOREIGN KEY (tenant_id) REFERENCES tenants(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ------------------------------------------------------------
@@ -27,6 +49,7 @@ CREATE TABLE IF NOT EXISTS usuarios (
 -- ------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS productos (
   id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  tenant_id INT UNSIGNED NOT NULL,
   nombre VARCHAR(150) NOT NULL,
   categoria VARCHAR(80) DEFAULT NULL,
   codigo_barras VARCHAR(50) DEFAULT NULL,
@@ -37,7 +60,9 @@ CREATE TABLE IF NOT EXISTS productos (
   actualizado_en DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
   KEY idx_productos_nombre (nombre),
-  KEY idx_productos_codigo (codigo_barras)
+  KEY idx_productos_codigo (codigo_barras),
+  KEY idx_productos_tenant (tenant_id),
+  CONSTRAINT fk_productos_tenant FOREIGN KEY (tenant_id) REFERENCES tenants(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ------------------------------------------------------------
@@ -45,6 +70,7 @@ CREATE TABLE IF NOT EXISTS productos (
 -- ------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS proveedores (
   id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  tenant_id INT UNSIGNED NOT NULL,
   nombre VARCHAR(150) NOT NULL,
   contacto VARCHAR(100) DEFAULT NULL,
   telefono VARCHAR(40) DEFAULT NULL,
@@ -54,7 +80,9 @@ CREATE TABLE IF NOT EXISTS proveedores (
   activo TINYINT(1) NOT NULL DEFAULT 1,
   creado_en DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
-  KEY idx_proveedores_nombre (nombre)
+  KEY idx_proveedores_nombre (nombre),
+  KEY idx_proveedores_tenant (tenant_id),
+  CONSTRAINT fk_proveedores_tenant FOREIGN KEY (tenant_id) REFERENCES tenants(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ------------------------------------------------------------
@@ -63,6 +91,7 @@ CREATE TABLE IF NOT EXISTS proveedores (
 -- ------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS precios_proveedor (
   id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  tenant_id INT UNSIGNED NOT NULL,
   producto_id INT UNSIGNED NOT NULL,
   proveedor_id INT UNSIGNED NOT NULL,
   precio_compra DECIMAL(12,2) NOT NULL,
@@ -73,8 +102,10 @@ CREATE TABLE IF NOT EXISTS precios_proveedor (
   PRIMARY KEY (id),
   UNIQUE KEY uq_producto_proveedor (producto_id, proveedor_id),
   KEY idx_pp_proveedor (proveedor_id),
+  KEY idx_pp_tenant (tenant_id),
   CONSTRAINT fk_pp_producto  FOREIGN KEY (producto_id)  REFERENCES productos(id),
-  CONSTRAINT fk_pp_proveedor FOREIGN KEY (proveedor_id) REFERENCES proveedores(id)
+  CONSTRAINT fk_pp_proveedor FOREIGN KEY (proveedor_id) REFERENCES proveedores(id),
+  CONSTRAINT fk_pp_tenant    FOREIGN KEY (tenant_id)    REFERENCES tenants(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ------------------------------------------------------------
@@ -83,6 +114,7 @@ CREATE TABLE IF NOT EXISTS precios_proveedor (
 -- ------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS historial_precios (
   id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  tenant_id INT UNSIGNED NOT NULL,
   producto_id INT UNSIGNED NOT NULL,
   proveedor_id INT UNSIGNED NOT NULL,
   precio_anterior DECIMAL(12,2) NOT NULL,
@@ -93,9 +125,11 @@ CREATE TABLE IF NOT EXISTS historial_precios (
   KEY idx_hp_producto (producto_id),
   KEY idx_hp_proveedor (proveedor_id),
   KEY idx_hp_fecha (fecha_cambio),
+  KEY idx_hp_tenant (tenant_id),
   CONSTRAINT fk_hp_producto  FOREIGN KEY (producto_id)  REFERENCES productos(id),
   CONSTRAINT fk_hp_proveedor FOREIGN KEY (proveedor_id) REFERENCES proveedores(id),
-  CONSTRAINT fk_hp_usuario   FOREIGN KEY (usuario_id)   REFERENCES usuarios(id)
+  CONSTRAINT fk_hp_usuario   FOREIGN KEY (usuario_id)   REFERENCES usuarios(id),
+  CONSTRAINT fk_hp_tenant    FOREIGN KEY (tenant_id)    REFERENCES tenants(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ------------------------------------------------------------
@@ -103,6 +137,7 @@ CREATE TABLE IF NOT EXISTS historial_precios (
 -- ------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS pagos (
   id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  tenant_id INT UNSIGNED NOT NULL,
   fecha DATE NOT NULL,
   proveedor_id INT UNSIGNED NOT NULL,
   monto DECIMAL(12,2) NOT NULL,
@@ -115,8 +150,10 @@ CREATE TABLE IF NOT EXISTS pagos (
   PRIMARY KEY (id),
   KEY idx_pagos_fecha (fecha),
   KEY idx_pagos_proveedor (proveedor_id),
+  KEY idx_pagos_tenant (tenant_id),
   CONSTRAINT fk_pagos_proveedor FOREIGN KEY (proveedor_id) REFERENCES proveedores(id),
-  CONSTRAINT fk_pagos_usuario   FOREIGN KEY (usuario_id)   REFERENCES usuarios(id)
+  CONSTRAINT fk_pagos_usuario   FOREIGN KEY (usuario_id)   REFERENCES usuarios(id),
+  CONSTRAINT fk_pagos_tenant    FOREIGN KEY (tenant_id)    REFERENCES tenants(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ------------------------------------------------------------
@@ -127,6 +164,7 @@ CREATE TABLE IF NOT EXISTS pagos (
 -- ------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS ingresos (
   id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  tenant_id INT UNSIGNED NOT NULL,
   fecha DATE NOT NULL,
   monto DECIMAL(12,2) NOT NULL,
   medio ENUM('Efectivo','Transferencia','Tarjeta/POS','Mercado Pago','Otro') NOT NULL,
@@ -135,7 +173,9 @@ CREATE TABLE IF NOT EXISTS ingresos (
   creado_en DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
   KEY idx_ingresos_fecha (fecha),
-  CONSTRAINT fk_ingresos_usuario FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
+  KEY idx_ingresos_tenant (tenant_id),
+  CONSTRAINT fk_ingresos_usuario FOREIGN KEY (usuario_id) REFERENCES usuarios(id),
+  CONSTRAINT fk_ingresos_tenant  FOREIGN KEY (tenant_id)  REFERENCES tenants(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ------------------------------------------------------------
@@ -143,14 +183,18 @@ CREATE TABLE IF NOT EXISTS ingresos (
 -- Clave/valor genérico para ajustes de la app (por ahora, la
 -- moneda). Pensada para poder sumar más ajustes en el futuro sin
 -- tener que crear una columna nueva por cada uno.
+-- PK compuesta (tenant_id, clave): cada tenant tiene su propio valor
+-- para la misma clave (ej. cada comercio elige su propia moneda).
 -- ------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS configuracion (
+  tenant_id INT UNSIGNED NOT NULL,
   clave VARCHAR(50) NOT NULL,
   valor VARCHAR(255) NOT NULL,
-  PRIMARY KEY (clave)
+  PRIMARY KEY (tenant_id, clave),
+  CONSTRAINT fk_configuracion_tenant FOREIGN KEY (tenant_id) REFERENCES tenants(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-INSERT INTO configuracion (clave, valor) VALUES ('moneda', 'ARS');
+INSERT INTO configuracion (tenant_id, clave, valor) VALUES (1, 'moneda', 'ARS');
 
 SET FOREIGN_KEY_CHECKS = 1;
 
@@ -159,27 +203,28 @@ SET FOREIGN_KEY_CHECKS = 1;
 -- Sirven para verificar que todo funciona. Se pueden borrar después.
 -- El usuario admin de prueba se creará desde la app en la Fase 2
 -- (la contraseña necesita encriptarse desde PHP).
+-- Asumen tenant_id=1 (el primer tenant insertado arriba).
 -- ============================================================
 
-INSERT INTO productos (nombre, categoria, precio_venta) VALUES
-('Coca-Cola lata 354ml', 'Bebidas', 1500.00),
-('Agua mineral 500ml', 'Bebidas', 900.00),
-('Papas fritas clásicas 90g', 'Snacks', 1800.00);
+INSERT INTO productos (tenant_id, nombre, categoria, precio_venta) VALUES
+(1, 'Coca-Cola lata 354ml', 'Bebidas', 1500.00),
+(1, 'Agua mineral 500ml', 'Bebidas', 900.00),
+(1, 'Papas fritas clásicas 90g', 'Snacks', 1800.00);
 
-INSERT INTO proveedores (nombre, contacto, telefono, dia_visita) VALUES
-('Distribuidora Sur', 'Carlos', '+54 261 555-0001', 'Lunes'),
-('Mayorista Centro', 'Ana', '+54 261 555-0002', 'Miércoles'),
-('Bebidas del Oeste', 'Jorge', '+54 261 555-0003', 'Viernes');
+INSERT INTO proveedores (tenant_id, nombre, contacto, telefono, dia_visita) VALUES
+(1, 'Distribuidora Sur', 'Carlos', '+54 261 555-0001', 'Lunes'),
+(1, 'Mayorista Centro', 'Ana', '+54 261 555-0002', 'Miércoles'),
+(1, 'Bebidas del Oeste', 'Jorge', '+54 261 555-0003', 'Viernes');
 
 -- Coca-Cola la venden los 3 proveedores (para probar el comparador)
-INSERT INTO precios_proveedor (producto_id, proveedor_id, precio_compra, unidad, cantidad_por_bulto, fecha_actualizacion) VALUES
-(1, 1, 950.00,  'unidad', NULL, CURDATE()),
-(1, 2, 21600.00,'bulto',  24,   CURDATE()),   -- 900 por unidad
-(1, 3, 1010.00, 'unidad', NULL, CURDATE()),
-(2, 1, 520.00,  'unidad', NULL, CURDATE()),
-(3, 2, 1150.00, 'unidad', NULL, CURDATE());
+INSERT INTO precios_proveedor (tenant_id, producto_id, proveedor_id, precio_compra, unidad, cantidad_por_bulto, fecha_actualizacion) VALUES
+(1, 1, 1, 950.00,  'unidad', NULL, CURDATE()),
+(1, 1, 2, 21600.00,'bulto',  24,   CURDATE()),   -- 900 por unidad
+(1, 1, 3, 1010.00, 'unidad', NULL, CURDATE()),
+(1, 2, 1, 520.00,  'unidad', NULL, CURDATE()),
+(1, 3, 2, 1150.00, 'unidad', NULL, CURDATE());
 
-INSERT INTO pagos (fecha, proveedor_id, monto, medio_pago, nro_comprobante) VALUES
-('2026-06-15', 1, 85000.00, 'Transferencia', 'FC-A-0001234'),
-('2026-07-02', 1, 92000.00, 'Efectivo', 'FC-A-0001301'),
-('2026-07-10', 2, 143500.00, 'Transferencia', 'FC-B-0009887');
+INSERT INTO pagos (tenant_id, fecha, proveedor_id, monto, medio_pago, nro_comprobante) VALUES
+(1, '2026-06-15', 1, 85000.00, 'Transferencia', 'FC-A-0001234'),
+(1, '2026-07-02', 1, 92000.00, 'Efectivo', 'FC-A-0001301'),
+(1, '2026-07-10', 2, 143500.00, 'Transferencia', 'FC-B-0009887');

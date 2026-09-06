@@ -12,6 +12,7 @@
 const express = require('express');
 const { pool } = require('../config/db');
 const { requiereLogin } = require('../middleware/autenticacion');
+const { TENANT_ID_ACTUAL } = require('../config/tenant');
 
 const router = express.Router();
 
@@ -52,9 +53,9 @@ router.post('/', async (req, res) => {
 
   try {
     const [resultado] = await pool.query(
-      `INSERT INTO ingresos (fecha, monto, medio, notas, usuario_id)
-       VALUES (?, ?, ?, ?, ?)`,
-      [fecha, monto, medio, notas || null, req.usuario.id]
+      `INSERT INTO ingresos (tenant_id, fecha, monto, medio, notas, usuario_id)
+       VALUES (?, ?, ?, ?, ?, ?)`,
+      [TENANT_ID_ACTUAL, fecha, monto, medio, notas || null, req.usuario.id]
     );
     res.status(201).json({ ok: true, id: resultado.insertId });
   } catch (error) {

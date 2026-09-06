@@ -21,6 +21,7 @@ const path = require('path');
 const multer = require('multer');
 const { pool } = require('../config/db');
 const { requiereLogin } = require('../middleware/autenticacion');
+const { TENANT_ID_ACTUAL } = require('../config/tenant');
 
 const router = express.Router();
 
@@ -102,9 +103,9 @@ router.post('/', subirComprobante.single('comprobante'), async (req, res) => {
 
   try {
     const [resultado] = await pool.query(
-      `INSERT INTO pagos (fecha, proveedor_id, monto, medio_pago, nro_comprobante, comprobante_url, notas, usuario_id)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-      [fecha, proveedor_id, monto, medio_pago, nro_comprobante || null, comprobante_url, notas || null, req.usuario.id]
+      `INSERT INTO pagos (tenant_id, fecha, proveedor_id, monto, medio_pago, nro_comprobante, comprobante_url, notas, usuario_id)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [TENANT_ID_ACTUAL, fecha, proveedor_id, monto, medio_pago, nro_comprobante || null, comprobante_url, notas || null, req.usuario.id]
     );
     res.status(201).json({ ok: true, id: resultado.insertId, comprobante_url });
   } catch (error) {
